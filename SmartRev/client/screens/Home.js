@@ -85,6 +85,8 @@ export default function Home({navigation}) {
     <Icon name="book" size={75} color={'black'}></Icon>
       <Text style={styles.text}>Homework</Text>
     </Pressable>   
+
+    
     </View>
 
     <Image
