@@ -115,35 +115,35 @@ export default function viewFlashcard({navigation}) {
           }
         > 
 
-<Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <Modal.Content maxWidth="400px">
-          <Modal.CloseButton />
-          <Modal.Header>{flashcard.topic}</Modal.Header>
-          <Modal.Body>
-            {flashcard.content}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button.Group space={2}>
-              <Button
-                
-                onPress={() => {
-                  setShowModal(false)
-                }}
-              >
-                Edit
-              </Button>
-              <Button
-                colorScheme="secondary"
-                onPress={() => {
-                  setShowModal(false)
-                }}
-              >
-                Delete
-              </Button>
-            </Button.Group>
-          </Modal.Footer>
-        </Modal.Content>
-      </Modal>
+        <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                <Modal.Content maxWidth="400px">
+                  <Modal.CloseButton />
+                  <Modal.Header>{flashcard.topic}</Modal.Header>
+                  <Modal.Body>
+                    {flashcard.content}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button.Group space={2}>
+                      <Button
+                        
+                        onPress={() => {
+                          setShowModal(false)
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        colorScheme="secondary"
+                        onPress={() => {
+                          setShowModal(false)
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </Button.Group>
+                  </Modal.Footer>
+                </Modal.Content>
+              </Modal>
 
             <Box
 							shadow={1}
