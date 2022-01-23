@@ -157,7 +157,7 @@ const [loaded, setLoaded] = useState(false)
         <Stack.Screen name="Video" component = {Video} options = {{ headerTitle: "Video",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="addVideo" component = {addVideo} options = {{ headerTitle: "Add a Video",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="watchVideo" component = {watchVideo} options = {{animationEnabled: false, headerTitle: "Video",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
-
+        {/* animationEnabled: false,  */}
         <Stack.Screen name="Note" component = {Note} options = {{ headerTitle: "Note",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="uploadNote" component = {uploadNote} options = {{ headerTitle: "Upload Note",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="filePreview" component = {filePreview} options = {{headerShown:false }} /> 

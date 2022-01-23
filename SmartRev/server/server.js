@@ -15,7 +15,7 @@ app.get("/api/v1/flashcards", async (req,res) =>{
 
 
     try{
-        const results = await db.query("select * from flashcard");
+        const results = await db.query("select * from flashcard ORDER BY flashcardid");
         console.log(results);
         res.status(200).json({
         status: "success",

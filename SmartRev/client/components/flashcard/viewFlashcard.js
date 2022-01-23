@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {useState, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, View, TextInput, ScrollView} from 'react-native';
+import { StyleSheet, SafeAreaView, View, TextInput, ScrollView, Alert} from 'react-native';
 import {Icon} from 'react-native-elements';
 import editFlashcard from './editFlashcard';
 import {useIsFocused} from "@react-navigation/native";
@@ -34,15 +34,17 @@ export default function viewFlashcard({navigation}) {
     const [arrayflashcard, setarrayflashcard] = useState([])
     const isFocused = useIsFocused();
     const [showModal, setShowModal] = useState(false)
+    const [flashcardindex, setFlashcardindex] = useState(0)
+    const [flashcardContent, setflashcardContent] = useState("")
+    const [flashcardTopic, setflashcardTopic] = useState("")
+    const [flashcardID, setflashcardID] = useState("")
  
 
 //nk rerun getarrayflashcard
     useEffect(() => {
         getArrayFlashcard();
         }, [isFocused]);
-  
      
-    
     const getArrayFlashcard =  async () => {try {
         const {data} = await axios.get("http://10.0.2.2:3006/api/v1/flashcards")
         setarrayflashcard(data.data.flashcard)
@@ -60,6 +62,7 @@ export default function viewFlashcard({navigation}) {
     try {
         const {data} = await axios.delete(`http://10.0.2.2:3006/api/v1/flashcards/${flashcardid}`)
         getArrayFlashcard()
+        
         
 
     } catch (error) {
@@ -110,40 +113,15 @@ export default function viewFlashcard({navigation}) {
                     // </View>
                     
         <Pressable key={index}
-          onPress={() => 
+          onPress={() => {
+            setflashcardTopic(flashcard.topic)
+            setflashcardContent(flashcard.content)
+            setflashcardID(flashcard.flashcardid)
             setShowModal(true)
-          }
+          }}
         > 
 
-        <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-                <Modal.Content maxWidth="400px">
-                  <Modal.CloseButton />
-                  <Modal.Header>{flashcard.topic}</Modal.Header>
-                  <Modal.Body>
-                    {flashcard.content}
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button.Group space={2}>
-                      <Button
-                        
-                        onPress={() => {
-                          setShowModal(false)
-                        }}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        colorScheme="secondary"
-                        onPress={() => {
-                          setShowModal(false)
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </Button.Group>
-                  </Modal.Footer>
-                </Modal.Content>
-              </Modal>
+        
 
             <Box
 							shadow={1}
@@ -187,7 +165,46 @@ export default function viewFlashcard({navigation}) {
                 )
             })
         }
+
+              
+
          </ScrollView>
+
+              <Modal isOpen = {showModal} onClose={() => setShowModal(false)}>
+                <Modal.Content maxWidth="400px">
+                  <Modal.CloseButton />
+                  <Modal.Header>{flashcardTopic}</Modal.Header>
+                  <Modal.Body>
+                    {flashcardContent}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button.Group space={2}>
+                      <Button
+                        
+                        onPress={() => {
+                          setShowModal(false)
+                          navigation.navigate("editFlashcard",{
+                                     id: flashcardID})
+                          
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        colorScheme="secondary"
+                        onPress={() => {
+                          setShowModal(false)
+                          deleteFlashcard(flashcardID)
+                          
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </Button.Group>
+                  </Modal.Footer>
+                </Modal.Content>
+              </Modal>
+
       </SafeAreaView>
     );
 }
