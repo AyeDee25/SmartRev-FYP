@@ -4,6 +4,7 @@ import { StyleSheet, SafeAreaView, View, TextInput, ScrollView, Alert} from 'rea
 import {Icon} from 'react-native-elements';
 import editFlashcard from './editFlashcard';
 import {useIsFocused} from "@react-navigation/native";
+import auth from '@react-native-firebase/auth';
 
 import { 
   Text, 
@@ -23,31 +24,70 @@ import {
   Flex,
   Modal,
   Pressable,
+
  
 Box } from 'native-base';
 
 
 
-export default function viewFlashcard({navigation}) {
+export default function viewFlashcard({navigation, route}) {
+
+   //get current user
+   var currentUseremail = '';
+
+   if (auth().currentUser) {
+    currentUseremail = auth().currentUser.email;
+   } else {
+   currentUseremail = '';
+   }
+   
+   //tggu getprofile settle baru execute getarrayflashcard
+   useEffect(() => {
+     init();
+     }, []);
+
+   const init = async() => {
+    const userid =  await getProfile();
+    getArrayFlashcard(userid);
+   }
+ 
+   const getProfile = () => {
+     
+   return new Promise(async(resolve,reject) => {
+    try {
+    
+      const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
+      resolve(data.data.profile.userid)
+      } catch (error) {
+          console.log(error)
+          reject(false)
+      }
+   }) 
+      
+   
+    
+    } 
+
+
+   
+   ////
  
 
     const [arrayflashcard, setarrayflashcard] = useState([])
     const isFocused = useIsFocused();
     const [showModal, setShowModal] = useState(false)
-    const [flashcardindex, setFlashcardindex] = useState(0)
     const [flashcardContent, setflashcardContent] = useState("")
-    const [flashcardTopic, setflashcardTopic] = useState("")
     const [flashcardID, setflashcardID] = useState("")
+    const [subject, setsubject] = useState(route.params.subject);
+   
  
 
-//nk rerun getarrayflashcard
-    useEffect(() => {
-        getArrayFlashcard();
-        }, [isFocused]);
-     
-    const getArrayFlashcard =  async () => {try {
-        const {data} = await axios.get("http://10.0.2.2:3006/api/v1/flashcards")
+    const getArrayFlashcard =  async (userid) => {try {
+       console.log("masukk");
+       console.log(userid);
+        const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/flashcards/${userid}/${subject}`)
         setarrayflashcard(data.data.flashcard)
+        
        
 
 
@@ -61,7 +101,7 @@ export default function viewFlashcard({navigation}) {
   const deleteFlashcard = async (flashcardid) => {
     try {
         const {data} = await axios.delete(`http://10.0.2.2:3006/api/v1/flashcards/${flashcardid}`)
-        getArrayFlashcard()
+        init();
         
         
 
@@ -75,46 +115,17 @@ export default function viewFlashcard({navigation}) {
       <SafeAreaView style={styles.container}>
     
         <ScrollView  showsVerticalScrollIndicator={false}> 
-      
         
         {
             arrayflashcard.map((flashcard, index) => {
 
               
                 return(
-                    // <View style ={styles.flashcard} key = {index}>
-
-      
-                    //     <Button  title = 'X' onPress = {()=> deleteFlashcard(flashcard.flashcardid)}/>
-                       
-                        
-                    //     <View style = {styles.titles}>
-                        
-                    //     <Text style = {styles.title}>
-                    //         {flashcard.topic}
-                    //     </Text>
-
-                    //     </View>
-
-                    //     <View style = {styles.flashcardcontent}>
-                    //     <Text>
-                    //         {flashcard.content}
-                    //         </Text>
-                    //         </View>
-                    //     <View> 
-                            
-                    //     </View>
-                    //     <Button  title = 'Edit' onPress = {()=>navigation.navigate("editFlashcard",{
-                    //         id: flashcard.flashcardid
-                    //     })}/>
-
-                       
-
-                    // </View>
+                    
                     
         <Pressable key={index}
           onPress={() => {
-            setflashcardTopic(flashcard.topic)
+            // setflashcardTopic(flashcard.topic)
             setflashcardContent(flashcard.content)
             setflashcardID(flashcard.flashcardid)
             setShowModal(true)
@@ -129,15 +140,17 @@ export default function viewFlashcard({navigation}) {
 							my={2}
 							mx={3}
 							borderRadius={16}
-              width={300}             
+              width={300} 
+              rounded="lg"            
 						>
 							<VStack >
 								<Heading
 									size="md"
-									p={4}
-									color={'black'}
+									p={0.5}
+									bg = {'#b1b1cd'}
+                  rounded= "sm"   
 								>
-									{flashcard.topic}
+									{/* {flashcard.topic} */}
 								</Heading>
 								<Divider
 									bg={'warmGray.200'}
@@ -149,7 +162,7 @@ export default function viewFlashcard({navigation}) {
 									d="flex"
                   
 								>
-                  <Text numberOfLines={1}>
+                  <Text numberOfLines={3} >
 									{flashcard.content}
                   </Text>
 								</Flex>
@@ -171,15 +184,15 @@ export default function viewFlashcard({navigation}) {
          </ScrollView>
 
               <Modal isOpen = {showModal} onClose={() => setShowModal(false)}>
-                <Modal.Content maxWidth="400px">
+                <Modal.Content maxWidth="400px" height={'250px'}>
                   <Modal.CloseButton />
-                  <Modal.Header>{flashcardTopic}</Modal.Header>
-                  <Modal.Body>
+                  {/* <Modal.Header>{flashcardTopic}</Modal.Header> */}
+                  <Modal.Body>                    
                     {flashcardContent}
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button.Group space={2}>
-                      <Button
+                    <Button.Group space={2} justify="center">
+                      {/* <Button
                         
                         onPress={() => {
                           setShowModal(false)
@@ -189,7 +202,7 @@ export default function viewFlashcard({navigation}) {
                         }}
                       >
                         Edit
-                      </Button>
+                      </Button> */}
                       <Button
                         colorScheme="secondary"
                         onPress={() => {

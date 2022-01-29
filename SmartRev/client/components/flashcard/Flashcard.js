@@ -19,8 +19,9 @@ export default function Flashcard({navigation}) {
     }
 
     const viewFlashcard = () => {
-        navigation.navigate("viewFlashcard")
+        navigation.navigate("flashcardSubject")
     }
+
   return (
     <SafeAreaView style={styles.container}>
       

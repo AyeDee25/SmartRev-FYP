@@ -1,6 +1,27 @@
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, SafeAreaView, Button, View, TextInput, ScrollView} from 'react-native';
+import { StyleSheet, SafeAreaView, View, TextInput, ScrollView} from 'react-native';
+import { 
+  Text, 
+  VStack,
+  FormControl,
+  Input,
+  NativeBaseProvider,
+  TextArea,
+  Spacer,
+  Center,
+  Button,
+  useColorModeValue,
+  ZStack,
+  Heading,
+  colorMode,
+  Divider,
+  Flex,
+  Modal,
+  Pressable,
+
+ 
+Box } from 'native-base';
 
 export default function viewForum({navigation}) {
  
@@ -37,21 +58,72 @@ export default function viewForum({navigation}) {
         {
             arrayforum.map((forum, index) => {
                 return(
-                    <View style ={styles.forum} key = {index}>
-                        <View style = {styles.titles}>
-                        <Text style = {styles.title}>
-                            {forum.topic}
-                        </Text>
-                        </View>
-                        <View style = {styles.forumcontent}>
-                        <Text>
-                            {forum.content}
-                            </Text>
-                            </View>
-                        <View> 
-                            <TextInput style={styles.inputlong} multiline={true} ></TextInput>
-                        </View>
-                    </View>
+                    // <View style ={styles.forum} key = {index}>
+                    //     <View style = {styles.titles}>
+                    //     <Text style = {styles.title}>
+                    //         {forum.topic}
+                    //     </Text>
+                    //     </View>
+                    //     <View style = {styles.forumcontent}>
+                    //     <Text>
+                    //         {forum.content}
+                    //         </Text>
+                    //         </View>
+                    //     <View> 
+                    //         <TextInput style={styles.inputlong} multiline={true} ></TextInput>
+                    //     </View>
+                    // </View>
+
+                    <Pressable key={index}
+                      onPress={() => {
+                        // setflashcardTopic(flashcard.topic)
+                        // setflashcardContent(flashcard.content)
+                        // setflashcardID(flashcard.flashcardid)
+                        // setShowModal(true)
+                      }}
+                    > 
+
+                        <Box
+                          shadow={1}
+                          bg={'white'}
+                          my={2}
+                          mx={3}
+                          borderRadius={16}
+                          width={300} 
+                          rounded="lg"            
+                        >
+                          <VStack >
+                            <Heading
+                              size="md"
+                              p={2}
+                              bg = {'#66a3ff'}
+                              rounded= "sm"   
+                            >
+                              {forum.topic}
+                            </Heading>
+                            <Divider
+                              bg={'warmGray.200'}
+                            />
+                            <Flex
+                              align="center"
+                              p={6}
+                              justify="center"
+                              d="flex"
+                              
+                            >
+                              <Text numberOfLines={3} >
+                              {forum.content}
+                              </Text>
+                            </Flex>
+                          </VStack>
+                        </Box>
+
+
+                      
+
+                      </Pressable>
+
+
                 )
             })
         }

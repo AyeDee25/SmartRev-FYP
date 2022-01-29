@@ -55,7 +55,7 @@ export default function uploadNote({navigation}) {
 
     async function uploadFileToFirebaseStorage(result, file){
       const uploadTask = storage()
-      .ref('allFiles/' + file.name)
+      .ref('Notes/' + file.name)
       .putString(result, 'base64',{contentType:file.type});
 
       uploadTask.on('state_changed', 
@@ -89,7 +89,7 @@ export default function uploadNote({navigation}) {
 
     function saveFileToRealimeDatabase(downloadURL, file){
       const uniqueKey = database().ref().push().key;
-      database().ref('allFiles/' + uniqueKey).update({
+      database().ref('Notes/' + uniqueKey).update({
         fileName: file.name,
         fileType: file.type,
         fileURL: downloadURL,
@@ -100,13 +100,13 @@ export default function uploadNote({navigation}) {
 
       setFileList([]);
 
-      const onChildAdded = database().ref('allFiles').on('child_added',(snapshot)=>{
+      const onChildAdded = database().ref('Notes').on('child_added',(snapshot)=>{
         let helperArr = [];
         helperArr.push(snapshot.val());
         setFileList((files)=>[...files,...helperArr])
         
       })
-      return()=> database().ref('allFiles').off('child_added', onChildAdded);
+      return()=> database().ref('Notes').off('child_added', onChildAdded);
       }, []);
 
 

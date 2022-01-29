@@ -10,12 +10,34 @@ const app = express();
 app.use(express.json());
 
 
-//Get all flashcards
+//Get all flashcards (not used)
 app.get("/api/v1/flashcards", async (req,res) =>{
 
 
     try{
         const results = await db.query("select * from flashcard ORDER BY flashcardid");
+        console.log(results);
+        res.status(200).json({
+        status: "success",
+        results: results.rows.length,
+        data:{
+            flashcard: results.rows,
+        }, 
+    });
+    } catch(err){
+        console.log(err);
+    }
+    
+    
+});
+
+//Get all flashcards with subject and userid
+app.get("/api/v1/flashcards/:userid/:subject", async (req,res) =>{
+
+
+    try{
+        console.log(req.params.userid, req.params.subject);
+        const results = await db.query("select * from flashcard WHERE userid = $1 AND subject = $2 ORDER BY flashcardid", [req.params.userid, req.params.subject]);
         console.log(results);
         res.status(200).json({
         status: "success",
@@ -62,7 +84,7 @@ app.post("/api/v1/flashcards",async (req,res) =>{
 
    try {
         const results = await db.query(
-        "INSERT INTO flashcard (topic, content) values ($1, $2) returning *", [req.body.topic, req.body.content]
+        "INSERT INTO flashcard (userid, subject, content) values ($1, $2, $3) returning *", [req.body.userid, req.body.selectedSubject, req.body.content]
         );
         console.log(results);
         res.status(201).json({
@@ -72,32 +94,32 @@ app.post("/api/v1/flashcards",async (req,res) =>{
             }, 
         });
    } catch (error) {
-        console.log(err); 
+        console.log(error); 
    }
    
 
 });
 
 //Update a flashcard
-app.put("/api/v1/flashcards/:id",async(req,res) =>{
+// app.put("/api/v1/flashcards/:id",async(req,res) =>{
     
-    try {
-        const results = await db.query(
-            "UPDATE flashcard SET topic = $1, content = $2 where flashcardid = $3 returning *", 
-            [req.body.topic, req.body.content, req.params.id]
-            );
+//     try {
+//         const results = await db.query(
+//             "UPDATE flashcard SET topic = $1, content = $2 where flashcardid = $3 returning *", 
+//             [req.body.topic, req.body.content, req.params.id]
+//             );
 
-            res.status(201).json({
-                status: "success",
-                data:{
-                    flashcard: results.rows[0],
-                }, 
-            });
-    } catch (err) {
-        console.log(err); 
-    }    
+//             res.status(201).json({
+//                 status: "success",
+//                 data:{
+//                     flashcard: results.rows[0],
+//                 }, 
+//             });
+//     } catch (err) {
+//         console.log(err); 
+//     }    
     
- });
+//  });
 
  //Delete a flashcard
  app.delete("/api/v1/flashcards/:id", async(req,res) =>{
@@ -276,7 +298,7 @@ app.post("/api/v1/profile",async (req,res) =>{
  
     try {
          const results = await db.query(
-         "INSERT INTO profile (name, email, password, phonenumber, school) values ($1, $2, $3, $4, $5) returning *", [req.body.name, req.body.email, req.body.password, req.body.phoneNumber, req.body.school]
+         "INSERT INTO users (fullname, email, password, phonenumber, school, usertype) values ($1, $2, $3, $4, $5, $6) returning *", [req.body.name, req.body.email, req.body.password, req.body.phoneNumber, req.body.school, req.body.usertype]
          );
          console.log(results);
          res.status(201).json({
@@ -298,7 +320,7 @@ app.get("/api/v1/profile/:email", async(req,res) =>{
  
     try {
         const results = await db.query(
-            "select * from profile where email = $1",[req.params.email]
+            "select * from users where email = $1",[req.params.email]
             );
         res.status(200).json({
          status: "success",

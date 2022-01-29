@@ -86,6 +86,10 @@ export default function Home({navigation}) {
       <Text style={styles.text}>Homework</Text>
     </Pressable>   
 
+    {/* <Pressable style={styles.button} onPress={() => auth().signOut()}>
+      <Text style={styles.text}>Logout</Text>
+    </Pressable>   */}
+
     
     </View>
 
@@ -135,7 +139,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 32,
     padding: 10,
     margin: 25,
-    borderRadius: 5,
+    borderRadius: 25,
     
     // elevation: 3,
     backgroundColor: '#00A6FB',

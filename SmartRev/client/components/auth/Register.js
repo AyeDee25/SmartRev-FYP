@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import FormInput from '../../utilities/FormInput';
 import FormButton from '../../utilities/FormButton';
+import FormSelect from '../../utilities/FormSelect';
 import auth from '@react-native-firebase/auth'
 
 const Register = ({navigation}) => {
@@ -26,6 +27,7 @@ const Register = ({navigation}) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phoneNumber, setphoneNumber] = useState('');
     const [school, setSchool] = useState('');
+    const [usertype, setusertype] = useState('student');
 
 
     const onSignUp = () => {
@@ -50,6 +52,7 @@ const Register = ({navigation}) => {
           password, 
           phoneNumber, 
           school,
+          usertype,
         })
 
       } catch (error) {
@@ -114,6 +117,13 @@ const Register = ({navigation}) => {
             onChangeText={(school) => setSchool(school)}
             placeholderText="School"
             iconType="book"
+            />
+
+            <FormSelect
+            labelValue={usertype}
+            onValueChange={(usertype, itemIndex) => setusertype(usertype)}
+            // placeholderText="Role"
+            iconType="user"
             />
          
             <FormButton

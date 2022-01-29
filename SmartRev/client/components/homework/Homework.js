@@ -13,7 +13,9 @@ import {
 
 export default function Homework({navigation}) {
 
-   
+    const uploadHomework = () => {
+      navigation.navigate("uploadHomework")
+    }
 
     return (
         
@@ -49,7 +51,7 @@ export default function Homework({navigation}) {
             }}
             
           >
-            <Button size="lg" w = "250"  py={4}   > Submit Homework </Button>
+            <Button size="lg" w = "250"  py={4}  onPress={uploadHomework} > Submit Homework </Button>
             
             
             

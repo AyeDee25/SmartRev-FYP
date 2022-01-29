@@ -23,6 +23,7 @@ import Flashcard from './components/flashcard/Flashcard';
 import createFlashcard from './components/flashcard/createFlashcard';
 import viewFlashcard from './components/flashcard/viewFlashcard';
 import editFlashcard from './components/flashcard/editFlashcard';
+import flashcardSubject from './components/flashcard/flashcardSubject';
 
 import Quiz from './components/quiz/Quiz';
 import createQuiz from './components/quiz/createQuiz';
@@ -38,6 +39,7 @@ import filePreview from './components/note/filePreview';
 
 
 import Homework from './components/homework/Homework';
+import uploadHomework from './components/homework/uploadHomework';
 
 import Profile from './components/profile/Profile';
 
@@ -145,6 +147,7 @@ const [loaded, setLoaded] = useState(false)
         <Stack.Screen name="editFlashcard" component = {editFlashcard} options = {{ headerTitle: "Edit Flashcard",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="createFlashcard" component = {createFlashcard} options = {{ headerTitle: "Create a Flashcard",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}}/> 
         <Stack.Screen name="viewFlashcard" component = {viewFlashcard} options = {{ headerTitle: "View Flashcard",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
+        <Stack.Screen name="flashcardSubject" component = {flashcardSubject} options = {{ headerTitle: "Subject",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
 
         <Stack.Screen name="Forum" component = {Forum} options = {{ headerTitle: "Forum",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="createForum" component = {createForum} options = {{ headerTitle: "Create a Forum",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
@@ -163,6 +166,7 @@ const [loaded, setLoaded] = useState(false)
         <Stack.Screen name="filePreview" component = {filePreview} options = {{headerShown:false }} /> 
 
         <Stack.Screen name="Homework" component = {Homework} options = {{ headerTitle: "Homework",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
+        <Stack.Screen name="uploadHomework" component = {uploadHomework} options = {{ headerTitle: "Homework",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
 
         {/* <Stack.Screen name="Profile" component = {Profile} options = {{ headerTitle: "Profile",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} /> */}
         <Stack.Screen name="Profile" component = {Profile} options={({navigation}) => ({
