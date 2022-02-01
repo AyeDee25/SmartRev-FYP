@@ -43,6 +43,9 @@ import uploadHomework from './components/homework/uploadHomework';
 
 import Profile from './components/profile/Profile';
 
+import Class from './components/class/Class';
+import createClass from './components/class/createClass';
+import joinClass from './components/class/joinClass';
 
 const Stack = createStackNavigator()
 
@@ -167,6 +170,10 @@ const [loaded, setLoaded] = useState(false)
 
         <Stack.Screen name="Homework" component = {Homework} options = {{ headerTitle: "Homework",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="uploadHomework" component = {uploadHomework} options = {{ headerTitle: "Homework",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
+
+        <Stack.Screen name="Class" component = {Class} options = {{ headerTitle: "Class",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
+        <Stack.Screen name="createClass" component = {createClass} options = {{ headerTitle: "Class",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
+        <Stack.Screen name="joinClass" component = {joinClass} options = {{ headerTitle: "Class",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
 
         {/* <Stack.Screen name="Profile" component = {Profile} options = {{ headerTitle: "Profile",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} /> */}
         <Stack.Screen name="Profile" component = {Profile} options={({navigation}) => ({

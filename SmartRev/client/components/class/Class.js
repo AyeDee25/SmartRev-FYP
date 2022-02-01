@@ -15,7 +15,7 @@ import {
 } from "native-base"
 
 
-export default function Quiz({navigation}) {
+export default function Class({navigation}) {
 
     //get current user
     var currentUseremail = '';
@@ -46,12 +46,12 @@ export default function Quiz({navigation}) {
   
     } 
 
-    const answerQuiz = () => {
-        navigation.navigate("answerQuiz")
+    const createClass = () => {
+        navigation.navigate("createClass")
     }
 
-    const createQuiz = () => {
-        navigation.navigate("createQuiz")
+    const joinClass = () => {
+        navigation.navigate("joinClass")
     }
 
 if(usertype == "Student"){
@@ -82,7 +82,7 @@ if(usertype == "Student"){
               md: "0",
             }}
           >
-            <Button size="lg" w = "250" py={4} onPress={answerQuiz}> Take a Quiz </Button>
+            <Button size="lg" w = "250" py={4} onPress={joinClass}> Join a Class </Button>
             
            
             
@@ -123,7 +123,7 @@ if(usertype == "Student"){
              }}
            >
              
-             <Button size="lg" w = "250" py={4} variant="subtle" onPress={createQuiz}  > Create a Quiz </Button>
+             <Button size="lg" w = "250" py={4} variant="subtle" onPress={createClass}  > Create a Class </Button>
              
          </Stack>
          

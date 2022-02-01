@@ -338,3 +338,144 @@ app.listen(port, () => {
     console.log(`Server is up and listening on port ${port}`);
 });
 
+////////////////////////////////Class\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// Create a class
+app.post("/api/v1/class", async(req, res) => {
+
+    try {
+        const results = await db.query("INSERT INTO class (userid, name, code, subject) values ($1,$2,$3,$4) returning *", [req.body.userid, req.body.name, req.body.code, req.body.selectedSubject]);
+        console.log(results);
+        
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get a class by code
+app.get("/api/v1/class/:code", async(req, res) => {
+    console.log(req.params.code);
+
+    try {
+        const results = await db.query("SELECT * FROM class WHERE code = $1", [req.params.code]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                class: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get a class by id
+app.get("/api/v1/class/:id", async(req, res) => {
+    console.log(req.params.id);
+
+    try {
+        const results = await db.query("SELECT * FROM class WHERE userid = $1", [req.params.id]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                class: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Update math code at user profile
+app.put("/api/v1/profile/mathematics/:id", async (req, res) => {
+    console.log(req.params.id);
+    console.log(req.body)
+
+    try{
+        const results = await db.query("UPDATE users SET math = $1 WHERE userid = $2 returning *", 
+        [req.body.code, req.params.id]);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                profile: results.rows[0],
+            },
+        });
+
+    }catch(err){
+        console.log(err);
+    }
+    
+});
+
+// Update physics code at user profile
+app.put("/api/v1/profile/physics/:id", async (req, res) => {
+    console.log(req.params.id);
+    console.log(req.body)
+
+    try{
+        const results = await db.query("UPDATE users SET physics = $1 WHERE userid = $2 returning *", 
+        [req.body.code, req.params.id]);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                profile: results.rows[0],
+            },
+        });
+
+    }catch(err){
+        console.log(err);
+    }
+    
+});
+
+// Update chemistry code at user profile
+app.put("/api/v1/profile/chemistry/:id", async (req, res) => {
+    console.log(req.params.id);
+    console.log(req.body)
+
+    try{
+        const results = await db.query("UPDATE users SET chemistry = $1 WHERE userid = $2 returning *", 
+        [req.body.code, req.params.id]);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                profile: results.rows[0],
+            },
+        });
+
+    }catch(err){
+        console.log(err);
+    }
+    
+});
+
+// Update biology code at user profile
+app.put("/api/v1/profile/biology/:id", async (req, res) => {
+    console.log(req.params.id);
+    console.log(req.body)
+
+    try{
+        const results = await db.query("UPDATE users SET biology = $1 WHERE userid = $2 returning *", 
+        [req.body.code, req.params.id]);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                profile: results.rows[0],
+            },
+        });
+
+    }catch(err){
+        console.log(err);
+    }
+    
+});
+

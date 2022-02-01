@@ -64,8 +64,9 @@ export default function Profile({navigation}) {
             <View style={styles.bodyContent}>
               <Text style={styles.name}>{arrayprofile.fullname}</Text>
               <Text style={styles.info}>{arrayprofile.email}</Text>
-              <Text style={styles.info}>{arrayprofile.phonenumber}</Text>
-              <Text style={styles.info}>{arrayprofile.school}</Text>
+              <Text style={styles.description}>{arrayprofile.phonenumber}</Text>
+              <Text style={styles.description}>{arrayprofile.school}</Text>
+              <Text style={styles.description}>{arrayprofile.usertype}</Text>
               <Text style={styles.description}></Text>
               
               {/* <TouchableOpacity style={styles.buttonContainer}>

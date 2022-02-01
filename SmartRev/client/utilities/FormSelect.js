@@ -17,8 +17,8 @@ const FormSelect = ({labelValue, placeholderText, iconType, ...rest}) => {
         numberOfLines={1}
         {...rest}
       >
-          <Picker.Item label="Student" value="student" />
-          <Picker.Item label="Teacher" value="teacher" />
+          <Picker.Item label="Student" value="Student" />
+          <Picker.Item label="Teacher" value="Teacher" />
       </Picker>
 
     </View>

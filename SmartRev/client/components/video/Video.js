@@ -1,4 +1,7 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+import auth from '@react-native-firebase/auth';
+import { useIsFocused } from '@react-navigation/native';
 import { StyleSheet, Text, View, SafeAreaView, Pressable } from 'react-native'
 import {
   Button,
@@ -13,6 +16,35 @@ import {
 
 export default function Video({navigation}) {
 
+      //get current user
+      var currentUseremail = '';
+
+      if (auth().currentUser) {
+       currentUseremail = auth().currentUser.email;
+      } else {
+      currentUseremail = '';
+      }
+      
+      const [usertype, setusertype] = useState();
+      const isFocused = useIsFocused();
+      
+      
+    
+      useEffect(() => {
+        getProfile(); 
+        }, [isFocused]);
+    
+      const getProfile =  async () => {try {
+    
+      const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
+      setusertype(data.data.profile.usertype)
+    
+      } catch (error) {
+          console.log(error)
+      }
+    
+      } 
+
       const watchVideo = () => {
           navigation.navigate("watchVideo")
       }
@@ -22,6 +54,7 @@ export default function Video({navigation}) {
       }
 
 
+  if(usertype == "Student"){
     return (
 
          <SafeAreaView style={styles.container}>
@@ -62,7 +95,7 @@ export default function Video({navigation}) {
             
           >
             <Button size="lg" w = "250"  py={4}  onPress={watchVideo} > Watch Video </Button>
-            <Button size="lg" w = "250" py={4} variant="subtle" onPress={addVideo}> Add a Video </Button>
+
             
             
         </Stack>
@@ -71,7 +104,59 @@ export default function Video({navigation}) {
       </VStack>
 
       </SafeAreaView>
-    )
+    )}
+    else{
+      return (
+
+        <SafeAreaView style={styles.container}>
+     
+
+        {/* <Pressable style={styles.button} onPress={watchVideo}>
+          <Text style={styles.text}>Watch Video</Text>
+        </Pressable>
+   
+        <Pressable style={styles.button} onPress={addVideo}>
+          <Text style={styles.text}>Add Video</Text>
+        </Pressable>   */}
+             
+        
+       <VStack
+         w="100%"
+         space={2.5}
+         px="2"
+         mt="4"
+         alignItems="center"
+         justifyContent="center"
+         
+       >
+         {/* Solid */}
+         
+         <Stack
+           mb="2.5"
+           mt="1.5"
+           direction={{
+             base: "column",
+             md: "row",
+           }}
+           space={25}
+           mx={{
+             base: "auto",
+             md: "0",
+           }}
+           
+         >
+
+           <Button size="lg" w = "250" py={4} variant="subtle" onPress={addVideo}> Add a Video </Button>
+           
+           
+       </Stack>
+       
+    
+     </VStack>
+
+     </SafeAreaView>
+   )
+    }
 }
 
 const styles = StyleSheet.create({
