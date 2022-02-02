@@ -174,6 +174,7 @@ export default function Home({navigation}) {
         </View>
     
         <View style={styles.row}>
+          
         <Pressable style={styles.button} onPress={openForum}>
         <Icon name="comments" size={75} color={'black'}></Icon>
           <Text style={styles.text}>Forum</Text>

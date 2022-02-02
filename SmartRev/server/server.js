@@ -9,31 +9,32 @@ const app = express();
 
 app.use(express.json());
 
+////////////////////////////////////////////Flashcard\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 //Get all flashcards (not used)
-app.get("/api/v1/flashcards", async (req,res) =>{
+// app.get("/api/v1/flashcards", async (req,res) =>{
 
 
-    try{
-        const results = await db.query("select * from flashcard ORDER BY flashcardid");
-        console.log(results);
-        res.status(200).json({
-        status: "success",
-        results: results.rows.length,
-        data:{
-            flashcard: results.rows,
-        }, 
-    });
-    } catch(err){
-        console.log(err);
-    }
+//     try{
+//         const results = await db.query("select * from flashcard ORDER BY flashcardid");
+//         console.log(results);
+//         res.status(200).json({
+//         status: "success",
+//         results: results.rows.length,
+//         data:{
+//             flashcard: results.rows,
+//         }, 
+//     });
+//     } catch(err){
+//         console.log(err);
+//     }
     
     
-});
+// });
 
 //Get all flashcards with subject and userid
 app.get("/api/v1/flashcards/:userid/:subject", async (req,res) =>{
-
+console.log("Get all flashcards with subject and userid");
 
     try{
         console.log(req.params.userid, req.params.subject);
@@ -55,6 +56,7 @@ app.get("/api/v1/flashcards/:userid/:subject", async (req,res) =>{
 
 //Get a flashcard
 app.get("/api/v1/flashcards/:id", async(req,res) =>{
+    console.log("get a flashcard");
    console.log(req.params.id);
 
    try {
@@ -80,6 +82,7 @@ app.get("/api/v1/flashcards/:id", async(req,res) =>{
 
 //Create a flashcard
 app.post("/api/v1/flashcards",async (req,res) =>{
+    console.log("create a flashcard");
    console.log(req.body);
 
    try {
@@ -123,6 +126,7 @@ app.post("/api/v1/flashcards",async (req,res) =>{
 
  //Delete a flashcard
  app.delete("/api/v1/flashcards/:id", async(req,res) =>{
+     console.log("delete flashcard");
 
     try {
         const results = await db.query(
@@ -140,160 +144,292 @@ app.post("/api/v1/flashcards",async (req,res) =>{
    
  });
 
- //--------------------------------------------------------------------
+ ///////////////////////////////////////////////////Forum\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
- //Get all forum
-app.get("/api/v1/forum", async (req,res) =>{
+ // Create a Forum
+app.post("/forum/create", async(req, res) => {
+    console.log("create forum");
 
+    try {
+        const results = await db.query("INSERT INTO forum (title, details, author, date, class, nameclass, subject) values ($1,$2,$3,$4,$5,$6,$7)", [req.body.title, req.body.details, req.body.author, req.body.todayDate, req.body.code, req.body.nameclass, req.body.subject])
+        console.log(results);
+        
+    } catch (err) {
+        console.log(err);
+    }
 
-    try{
-        const results = await db.query("select * from forum");
+});
+
+// Get all forum
+app.get("/forum/display", async(req, res) => {
+console.log("get all forum");
+    try {
+        const results = await db.query("SELECT * FROM forum");
         console.log(results);
         res.status(200).json({
-        status: "success",
-        results: results.rows.length,
-        data:{
-            forum: results.rows,
-        }, 
-    });
-    } catch(err){
+            status: "success",
+            data: {
+                forum: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get certain forum
+app.get("/forum/display/:info", async(req, res) => {
+    console.log("get certain forum");
+
+    console.log(req.params.info)
+
+    try {
+        const results = await db.query("SELECT * FROM forum WHERE class = $1",[req.params.info]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                forum: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get a forum
+app.get("/forum/description/:id", async(req, res) => {
+    console.log(req.params.id);
+    console.log("get a forum");
+
+    try {
+        const results = await db.query("SELECT * FROM forum where forumid = $1",[req.params.id]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                forum: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Update a forum
+app.put("/forum/update/:id", async (req, res) => {
+    console.log("update forum");
+    console.log(req.params.id);
+    console.log(req.body.replies)
+
+    try{
+        const results = await db.query("UPDATE test SET reply = $1 WHERE forumid = $2", 
+        [req.body.replies, req.body.id]);
+        console.log(results);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                forum: results.rows[0],
+            },
+        });
+
+    }catch(err){
         console.log(err);
     }
     
-    
 });
 
-//Get a forum
-app.get("/api/v1/forum/:id", async(req,res) =>{
-   console.log(req.params.id);
+// Create a reply
+app.post("/forum/reply", async(req, res) => {
+    console.log("create reply");
 
-   try {
-       const results = await db.query(
-           "select * from forum where forumid = $1",[req.params.id]
-           );
-       res.status(200).json({
-        status: "success",
-        data:{
-            flashcard: results.rows[0],
-        }, 
-   });
-   } catch (err) {
-       console.log(err);
-   }
-});
-
-//Create a forum
-app.post("/api/v1/forum",async (req,res) =>{
-   console.log(req.body);
-
-   try {
-        const results = await db.query(
-        "INSERT INTO forum (topic, content) values ($1, $2) returning *", [req.body.topic, req.body.content]
-        );
+    try {
+        const results = await db.query("INSERT INTO replyforum (userid, forumid, name, reply, date, time) values ($1,$2,$3,$4,$5,$6)", [req.body.userid, req.body.id, req.body.myreply.author, req.body.myreply.reply, req.body.myreply.date, req.body.myreply.time])
         console.log(results);
-        res.status(201).json({
-            status: "success",
-            data:{
-                forum: results.rows[0],
-            }, 
-        });
-   } catch (error) {
-        console.log(err); 
-   }
-   
+        
+    } catch (err) {
+        console.log(err);
+    }
 
 });
 
-//Update a forum
-app.put("/api/v1/forum/:id",async(req,res) =>{
-    
-    try {
-        const results = await db.query(
-            "UPDATE forum SET comment = $1, where forumid = $2 returning *", 
-            [req.body.comment,req.params.id]
-            );
-
-            res.status(201).json({
-                status: "success",
-                data:{
-                    forum: results.rows[0],
-                }, 
-            });
-    } catch (err) {
-        console.log(err); 
-    }    
-    
- });
-
- //Delete a forum
- app.delete("/api/v1/forum/:id", async(req,res) =>{
+// Get certain reply
+app.get("/forum/reply/:id", async(req, res) => {
+    console.log("get certain reply");
+    console.log(req.params.id);
 
     try {
-        const results = await db.query(
-            "DELETE FROM forum where forumid = $1", 
-            [req.params.id]
-            );
-
-            res.status(204).json({
-                status: "success",
-            });
-            
+        const results = await db.query("SELECT * FROM replyforum where forumid = $1",[req.params.id]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                reply: results.rows,
+            },
+        });
     } catch (err) {
-        console.log(err); 
+        console.log(err);
     }
+
+});
+
+//  //Get all forum
+// app.get("/api/v1/forum", async (req,res) =>{
+
+
+//     try{
+//         const results = await db.query("select * from forum");
+//         console.log(results);
+//         res.status(200).json({
+//         status: "success",
+//         results: results.rows.length,
+//         data:{
+//             forum: results.rows,
+//         }, 
+//     });
+//     } catch(err){
+//         console.log(err);
+//     }
+    
+    
+// });
+
+// //Get a forum
+// app.get("/api/v1/forum/:id", async(req,res) =>{
+//    console.log(req.params.id);
+
+//    try {
+//        const results = await db.query(
+//            "select * from forum where forumid = $1",[req.params.id]
+//            );
+//        res.status(200).json({
+//         status: "success",
+//         data:{
+//             flashcard: results.rows[0],
+//         }, 
+//    });
+//    } catch (err) {
+//        console.log(err);
+//    }
+// });
+
+// //Create a forum
+// app.post("/api/v1/forum",async (req,res) =>{
+//    console.log(req.body);
+
+//    try {
+//         const results = await db.query(
+//         "INSERT INTO forum (topic, content) values ($1, $2) returning *", [req.body.topic, req.body.content]
+//         );
+//         console.log(results);
+//         res.status(201).json({
+//             status: "success",
+//             data:{
+//                 forum: results.rows[0],
+//             }, 
+//         });
+//    } catch (error) {
+//         console.log(err); 
+//    }
    
- });
+
+// });
+
+// //Update a forum
+// app.put("/api/v1/forum/:id",async(req,res) =>{
+    
+//     try {
+//         const results = await db.query(
+//             "UPDATE forum SET comment = $1, where forumid = $2 returning *", 
+//             [req.body.comment,req.params.id]
+//             );
+
+//             res.status(201).json({
+//                 status: "success",
+//                 data:{
+//                     forum: results.rows[0],
+//                 }, 
+//             });
+//     } catch (err) {
+//         console.log(err); 
+//     }    
+    
+//  });
+
+//  //Delete a forum
+//  app.delete("/api/v1/forum/:id", async(req,res) =>{
+
+//     try {
+//         const results = await db.query(
+//             "DELETE FROM forum where forumid = $1", 
+//             [req.params.id]
+//             );
+
+//             res.status(204).json({
+//                 status: "success",
+//             });
+            
+//     } catch (err) {
+//         console.log(err); 
+//     }
+   
+//  });
 
  //--------------------------------------------------------------------
 
  //Get all video
-app.get("/api/v1/video", async (req,res) =>{
+// app.get("/api/v1/video", async (req,res) =>{
 
 
-    try{
-        const results = await db.query("select * from video");
-        console.log(results);
-        res.status(200).json({
-        status: "success",
-        results: results.rows.length,
-        data:{
-            video: results.rows,
-        }, 
-    });
-    } catch(err){
-        console.log(err);
-    }
+//     try{
+//         const results = await db.query("select * from video");
+//         console.log(results);
+//         res.status(200).json({
+//         status: "success",
+//         results: results.rows.length,
+//         data:{
+//             video: results.rows,
+//         }, 
+//     });
+//     } catch(err){
+//         console.log(err);
+//     }
     
     
-});
+// });
 
-//Create a video
-app.post("/api/v1/video",async (req,res) =>{
-    console.log(req.body);
+// //Create a video
+// app.post("/api/v1/video",async (req,res) =>{
+//     console.log(req.body);
  
-    try {
-         const results = await db.query(
-         "INSERT INTO video (title, link) values ($1, $2) returning *", [req.body.title, req.body.link]
-         );
-         console.log(results);
-         res.status(201).json({
-             status: "success",
-             data:{
-                 video: results.rows[0],
-             }, 
-         });
-    } catch (error) {
-         console.log(err); 
-    }
+//     try {
+//          const results = await db.query(
+//          "INSERT INTO video (title, link) values ($1, $2) returning *", [req.body.title, req.body.link]
+//          );
+//          console.log(results);
+//          res.status(201).json({
+//              status: "success",
+//              data:{
+//                  video: results.rows[0],
+//              }, 
+//          });
+//     } catch (error) {
+//          console.log(err); 
+//     }
     
  
- });
+//  });
 
 
- //--------------------------------------------------------------------
+ //////////////////////////////////////////////Profile\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
  //Create a profile
 app.post("/api/v1/profile",async (req,res) =>{
+    console.log("create a profile");
     console.log(req.body);
  
     try {
@@ -316,6 +452,7 @@ app.post("/api/v1/profile",async (req,res) =>{
 
  //Get a profile (guna ni nak retrieve authorization)
 app.get("/api/v1/profile/:email", async(req,res) =>{
+    console.log("get a profile");
     console.log(req.params.email);
  
     try {
@@ -333,16 +470,13 @@ app.get("/api/v1/profile/:email", async(req,res) =>{
     }
  });
 
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-    console.log(`Server is up and listening on port ${port}`);
-});
+
 
 ////////////////////////////////Class\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 // Create a class
 app.post("/api/v1/class", async(req, res) => {
-
+console.log("create class");
     try {
         const results = await db.query("INSERT INTO class (userid, name, code, subject) values ($1,$2,$3,$4) returning *", [req.body.userid, req.body.name, req.body.code, req.body.selectedSubject]);
         console.log(results);
@@ -355,6 +489,7 @@ app.post("/api/v1/class", async(req, res) => {
 
 // Get a class by code
 app.get("/api/v1/class/:code", async(req, res) => {
+console.log("get class by code");
     console.log(req.params.code);
 
     try {
@@ -373,12 +508,13 @@ app.get("/api/v1/class/:code", async(req, res) => {
 });
 
 // Get a class by id
-app.get("/api/v1/class/:id", async(req, res) => {
-    console.log(req.params.id);
+app.get("/api/v1/class/id/:id", async(req, res) => {
+     console.log("get class by id");
 
     try {
         const results = await db.query("SELECT * FROM class WHERE userid = $1", [req.params.id]);
-        console.log(results);
+        // console.log(results.rows);
+        console.log("server");
         res.status(200).json({
             status: "success",
             data: {
@@ -479,3 +615,159 @@ app.put("/api/v1/profile/biology/:id", async (req, res) => {
     
 });
 
+//////////////////////////////////////Video\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// Get all video
+app.get("/api/v1/video", async (req, res)=>{
+console.log("get all video");
+    try{
+    const results = await db.query("SELECT * FROM video")
+    console.log(results);
+    res.status(200).json({
+        status: "success",
+        data: {
+            video: results.rows,
+        },
+    });
+    }catch(err){
+        console.log(err);
+    }
+
+});
+
+// Get certain video
+app.get("/api/v1/video/:info", async (req, res)=>{
+console.log("get certain video");
+    console.log(req.params.info)
+
+    try{
+        const results = await db.query("SELECT * FROM video WHERE class=$1", [req.params.info])
+        // console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                video: results.rows,
+            },
+        });
+    }catch(err){
+        console.log(err);
+    }
+
+});
+
+// Create a video
+app.post("/api/v1/create/video", async(req, res)=>{
+    console.log("create a video");
+    console.log(req.body);
+    // subject="physics"
+
+    try{
+        const results = await db.query("INSERT INTO video (title, link, subject, class, nameclass) values ($1,$2,$3,$4,$5) returning *", [req.body.title, req.body.link, req.body.subject, req.body.code, req.body.nameclass])
+        console.log(results);
+        res.status(201).json({
+            status: "success",
+            data: {
+                video: results.rows[0],
+            },
+        });
+
+    }catch(err){
+        console.log(err)
+    }
+
+});
+
+// Delete a video
+app.delete("/api/v1/video/:id", async (req, res) => {
+
+    try{
+        const results = db.query("DELETE FROM video where videoid = $1", [req.params.id])
+        res.status(204).json({
+            status: "success",
+        });
+    }catch(err){
+        console.log(err)
+    }
+    
+});
+
+// // Get mathematics video
+// app.get("/api/v1/video/display/mathematics", async(req, res) => {
+
+//     const subject = "mathematics"
+//     try {
+//         const results = await db.query("SELECT * FROM video where subject = $1", [subject]);
+//         console.log(results);
+//         res.status(200).json({
+//             status: "success",
+//             data: {
+//                 video: results.rows,
+//             },
+//         });
+//     } catch (err) {
+//         console.log(err);
+//     }
+
+// });
+
+// // Get physics video
+// app.get("/api/v1/video/display/physics", async(req, res) => {
+
+//     const subject = "physics"
+//     try {
+//         const results = await db.query("SELECT * FROM video where subject = $1", [subject]);
+//         console.log(results);
+//         res.status(200).json({
+//             status: "success",
+//             data: {
+//                 video: results.rows,
+//             },
+//         });
+//     } catch (err) {
+//         console.log(err);
+//     }
+
+// });
+
+// // Get chemistry video
+// app.get("/api/v1/video/display/chemistry", async(req, res) => {
+
+//     const subject = "chemistry"
+//     try {
+//         const results = await db.query("SELECT * FROM video where subject = $1", [subject]);
+//         console.log(results);
+//         res.status(200).json({
+//             status: "success",
+//             data: {
+//                 video: results.rows,
+//             },
+//         });
+//     } catch (err) {
+//         console.log(err);
+//     }
+
+// });
+
+// // Get biology video
+// app.get("/api/v1/video/display/biology", async(req, res) => {
+
+//     const subject = "biology"
+//     try {
+//         const results = await db.query("SELECT * FROM video where subject = $1", [subject]);
+//         console.log(results);
+//         res.status(200).json({
+//             status: "success",
+//             data: {
+//                 video: results.rows,
+//             },
+//         });
+//     } catch (err) {
+//         console.log(err);
+//     }
+
+// });
+
+const port = process.env.PORT || 3001;
+app.listen(port, () => {
+    console.log(`Server is up and listening on port ${port}`);
+});

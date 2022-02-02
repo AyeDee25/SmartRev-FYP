@@ -32,6 +32,8 @@ import answerQuiz from './components/quiz/answerQuiz';
 import Video from './components/video/Video';
 import addVideo from './components/video/addVideo';
 import watchVideo from './components/video/watchVideo';
+import videoList from './components/video/videoList';
+import videoSubject from './components/video/videoSubject';
 
 import Note from './components/note/Note';
 import uploadNote from './components/note/uploadNote';
@@ -46,6 +48,7 @@ import Profile from './components/profile/Profile';
 import Class from './components/class/Class';
 import createClass from './components/class/createClass';
 import joinClass from './components/class/joinClass';
+
 
 const Stack = createStackNavigator()
 
@@ -163,6 +166,8 @@ const [loaded, setLoaded] = useState(false)
         <Stack.Screen name="Video" component = {Video} options = {{ headerTitle: "Video",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="addVideo" component = {addVideo} options = {{ headerTitle: "Add a Video",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="watchVideo" component = {watchVideo} options = {{animationEnabled: false, headerTitle: "Video",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
+        <Stack.Screen name="videoList" component = {videoList} options = {{headerTitle: "Video List",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
+        <Stack.Screen name="videoSubject" component = {videoSubject} options = {{headerTitle: "Subject",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         {/* animationEnabled: false,  */}
         <Stack.Screen name="Note" component = {Note} options = {{ headerTitle: "Note",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 
         <Stack.Screen name="uploadNote" component = {uploadNote} options = {{ headerTitle: "Upload Note",  headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' }}} /> 

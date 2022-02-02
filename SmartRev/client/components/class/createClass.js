@@ -99,17 +99,21 @@ const createClass = async () => {
         code,
     })
     
-    console.log()
+    console.log("dah create class")
     
-    Alert.alert('','You have created a class!',[
-      {onPress: () => navigation.goBack()}
-    ])
+    
 
     } catch (error) {
         console.log(error)
     }
   
 }
+
+const reverse = () => {
+  Alert.alert('','You have created a class!',[
+    {onPress: () => navigation.goBack()}
+  ])
+  }
 
   return (
 

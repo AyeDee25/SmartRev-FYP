@@ -27,7 +27,7 @@ const Register = ({navigation}) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phoneNumber, setphoneNumber] = useState('');
     const [school, setSchool] = useState('');
-    const [usertype, setusertype] = useState('student');
+    const [usertype, setusertype] = useState('Student');
 
 
     const onSignUp = () => {
@@ -122,7 +122,6 @@ const Register = ({navigation}) => {
             <FormSelect
             labelValue={usertype}
             onValueChange={(usertype, itemIndex) => setusertype(usertype)}
-            // placeholderText="Role"
             iconType="user"
             />
          

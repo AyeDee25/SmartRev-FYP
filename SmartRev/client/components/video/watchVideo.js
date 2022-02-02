@@ -4,11 +4,12 @@ import { Button, View, Alert, Text, StyleSheet, SafeAreaView, ScrollView } from 
 import YoutubePlayer from "react-native-youtube-iframe";
 import {useIsFocused} from "@react-navigation/native";
 
-export default function watchVideo({navigation}) {
+export default function watchVideo({navigation,route}) {
 
   const [playing, setPlaying] = useState(false);
   const [arrayvideo, setarrayvideo] = useState([])
   const isFocused = useIsFocused();
+  const [code, setcode] = useState(route.params.code);
 
   useEffect(() => {
     getArrayVideo();
@@ -21,14 +22,15 @@ export default function watchVideo({navigation}) {
     }
   }, []);
 
-  const togglePlaying = useCallback(() => {
-    setPlaying((prev) => !prev);
-  }, []);
+  // const togglePlaying = useCallback(() => {
+  //   setPlaying((prev) => !prev);
+  // }, []);
 
   const getArrayVideo =  async () => {try {
-    const {data} = await axios.get("http://10.0.2.2:3006/api/v1/video")
+  
+    const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/video/${code}`)
     setarrayvideo(data.data.video)
-   
+   console.log("ni dalam getarrayvideo");
 
 
   } catch (error) {

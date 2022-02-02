@@ -88,6 +88,7 @@ export default function viewFlashcard({navigation, route}) {
         const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/flashcards/${userid}/${subject}`)
         setarrayflashcard(data.data.flashcard)
         
+        
        
 
 
@@ -115,6 +116,7 @@ export default function viewFlashcard({navigation, route}) {
       <SafeAreaView style={styles.container}>
     
         <ScrollView  showsVerticalScrollIndicator={false}> 
+
         
         {
             arrayflashcard.map((flashcard, index) => {
@@ -147,20 +149,20 @@ export default function viewFlashcard({navigation, route}) {
 								<Heading
 									size="md"
 									p={0.5}
-									bg = {'#b1b1cd'}
+									bg = {'#cc9900'}
                   rounded= "sm"   
 								>
 									{/* {flashcard.topic} */}
 								</Heading>
-								<Divider
+								{/* <Divider
 									bg={'warmGray.200'}
-								/>
+								/> */}
 								<Flex
 									align="center"
 									p={6}
 									justify="center"
 									d="flex"
-                  
+                  bg = {'#ffff66'}
 								>
                   <Text numberOfLines={3} >
 									{flashcard.content}

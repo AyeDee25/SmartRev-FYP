@@ -44,6 +44,7 @@ export default function createFlashcard({navigation}) {
   const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
   setuserid(data.data.profile.userid)
 
+
   } catch (error) {
       console.log(error)
   }

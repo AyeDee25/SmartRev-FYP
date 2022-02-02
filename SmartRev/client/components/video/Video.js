@@ -26,6 +26,7 @@ export default function Video({navigation}) {
       }
       
       const [usertype, setusertype] = useState();
+    
       const isFocused = useIsFocused();
       
       
@@ -38,6 +39,8 @@ export default function Video({navigation}) {
     
       const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
       setusertype(data.data.profile.usertype)
+ 
+
     
       } catch (error) {
           console.log(error)
@@ -46,12 +49,18 @@ export default function Video({navigation}) {
       } 
 
       const watchVideo = () => {
-          navigation.navigate("watchVideo")
+          navigation.navigate("videoSubject")
       }
 
       const addVideo = () => {
           navigation.navigate("addVideo")
       }
+
+      const videoList = () => {
+          navigation.navigate("videoList")
+      }
+
+      
 
 
   if(usertype == "Student"){
@@ -145,6 +154,8 @@ export default function Video({navigation}) {
            }}
            
          >
+
+          <Button size="lg" w = "250" py={4} onPress={videoList}> Video List </Button>
 
            <Button size="lg" w = "250" py={4} variant="subtle" onPress={addVideo}> Add a Video </Button>
            

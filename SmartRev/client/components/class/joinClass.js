@@ -79,19 +79,41 @@ const [errors, setErrors] = useState({});
   //   });
   //   return false;
   // }
+  
+  const getSubject = () =>{
 
-const joinClass = async () => {
+    return new Promise(async(resolve,reject) => {
+    try {
 
-  try {
+      const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/class/${code}`)
+      resolve(data.data.class[0].subject)
+      }
+      catch (error) {
+          console.log(error)
+          reject(false)
+      }
+    }) 
+     }
 
-    const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/class/${code}`)
-    setSubject(data.data.class[0].subject)
+  const setCode = async(subject) =>{
 
-    const update = await axios.put(`http://10.0.2.2:3006/api/v1/profile/${subject}/${userid}`,{
-        code,
-    })
+    try {
+      const update = await axios.put(`http://10.0.2.2:3006/api/v1/profile/${subject}/${userid}`,{
+          code,
+      })      
+  
+      } catch (error) {
+          console.log(error)
+      }
+
+  }
+  
+
+  const joinClass = async () => {
     
-    console.log()
+  try {
+    const subject = await getSubject()
+    setCode(subject)
     
     Alert.alert('','You have joined a class!',[
       {onPress: () => navigation.goBack()}
