@@ -28,84 +28,84 @@ app.use(express.json());
 //     } catch(err){
 //         console.log(err);
 //     }
-    
-    
+
+
 // });
 
 //Get all flashcards with subject and userid
-app.get("/api/v1/flashcards/:userid/:subject", async (req,res) =>{
-console.log("Get all flashcards with subject and userid");
+app.get("/api/v1/flashcards/:userid/:subject", async (req, res) => {
+    console.log("Get all flashcards with subject and userid");
 
-    try{
+    try {
         console.log(req.params.userid, req.params.subject);
         const results = await db.query("select * from flashcard WHERE userid = $1 AND subject = $2 ORDER BY flashcardid", [req.params.userid, req.params.subject]);
         console.log(results);
         res.status(200).json({
-        status: "success",
-        results: results.rows.length,
-        data:{
-            flashcard: results.rows,
-        }, 
-    });
-    } catch(err){
+            status: "success",
+            results: results.rows.length,
+            data: {
+                flashcard: results.rows,
+            },
+        });
+    } catch (err) {
         console.log(err);
     }
-    
-    
+
+
 });
 
 //Get a flashcard
-app.get("/api/v1/flashcards/:id", async(req,res) =>{
+app.get("/api/v1/flashcards/:id", async (req, res) => {
     console.log("get a flashcard");
-   console.log(req.params.id);
+    console.log(req.params.id);
 
-   try {
-       const results = await db.query(
-           "select * from flashcard where flashcardid = $1",[req.params.id]
-           );
-       res.status(200).json({
-        status: "success",
-        data:{
-            flashcard: results.rows[0],
-        }, 
-   });
-   } catch (err) {
-       console.log(err);
-   }
+    try {
+        const results = await db.query(
+            "select * from flashcard where flashcardid = $1", [req.params.id]
+        );
+        res.status(200).json({
+            status: "success",
+            data: {
+                flashcard: results.rows[0],
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
 
-   
 
-     
+
+
 
 
 });
 
 //Create a flashcard
-app.post("/api/v1/flashcards",async (req,res) =>{
+app.post("/api/v1/flashcards", async (req, res) => {
     console.log("create a flashcard");
-   console.log(req.body);
+    console.log(req.body);
 
-   try {
+    try {
         const results = await db.query(
-        "INSERT INTO flashcard (userid, subject, content) values ($1, $2, $3) returning *", [req.body.userid, req.body.selectedSubject, req.body.content]
+            "INSERT INTO flashcard (userid, subject, content) values ($1, $2, $3) returning *", [req.body.userid, req.body.selectedSubject, req.body.content]
         );
         console.log(results);
         res.status(201).json({
             status: "success",
-            data:{
+            data: {
                 flashcard: results.rows[0],
-            }, 
+            },
         });
-   } catch (error) {
-        console.log(error); 
-   }
-   
+    } catch (error) {
+        console.log(error);
+    }
+
 
 });
 
 //Update a flashcard
 // app.put("/api/v1/flashcards/:id",async(req,res) =>{
-    
+
 //     try {
 //         const results = await db.query(
 //             "UPDATE flashcard SET topic = $1, content = $2 where flashcardid = $3 returning *", 
@@ -121,39 +121,39 @@ app.post("/api/v1/flashcards",async (req,res) =>{
 //     } catch (err) {
 //         console.log(err); 
 //     }    
-    
+
 //  });
 
- //Delete a flashcard
- app.delete("/api/v1/flashcards/:id", async(req,res) =>{
-     console.log("delete flashcard");
+//Delete a flashcard
+app.delete("/api/v1/flashcards/:id", async (req, res) => {
+    console.log("delete flashcard");
 
     try {
         const results = await db.query(
-            "DELETE FROM flashcard where flashcardid = $1", 
+            "DELETE FROM flashcard where flashcardid = $1",
             [req.params.id]
-            );
+        );
 
-            res.status(204).json({
-                status: "success",
-            });
-            
+        res.status(204).json({
+            status: "success",
+        });
+
     } catch (err) {
-        console.log(err); 
+        console.log(err);
     }
-   
- });
 
- ///////////////////////////////////////////////////Forum\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+});
 
- // Create a Forum
-app.post("/forum/create", async(req, res) => {
+///////////////////////////////////////////////////Forum\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// Create a Forum
+app.post("/api/v1/forum/create", async (req, res) => {
     console.log("create forum");
 
     try {
         const results = await db.query("INSERT INTO forum (title, details, author, date, class, nameclass, subject) values ($1,$2,$3,$4,$5,$6,$7)", [req.body.title, req.body.details, req.body.author, req.body.todayDate, req.body.code, req.body.nameclass, req.body.subject])
         console.log(results);
-        
+
     } catch (err) {
         console.log(err);
     }
@@ -161,8 +161,8 @@ app.post("/forum/create", async(req, res) => {
 });
 
 // Get all forum
-app.get("/forum/display", async(req, res) => {
-console.log("get all forum");
+app.get("/api/v1/forum/display", async (req, res) => {
+    console.log("get all forum");
     try {
         const results = await db.query("SELECT * FROM forum");
         console.log(results);
@@ -179,13 +179,13 @@ console.log("get all forum");
 });
 
 // Get certain forum
-app.get("/forum/display/:info", async(req, res) => {
+app.get("/api/v1/forum/display/:info", async (req, res) => {
     console.log("get certain forum");
 
     console.log(req.params.info)
 
     try {
-        const results = await db.query("SELECT * FROM forum WHERE class = $1",[req.params.info]);
+        const results = await db.query("SELECT * FROM forum WHERE class = $1", [req.params.info]);
         console.log(results);
         res.status(200).json({
             status: "success",
@@ -200,12 +200,12 @@ app.get("/forum/display/:info", async(req, res) => {
 });
 
 // Get a forum
-app.get("/forum/description/:id", async(req, res) => {
+app.get("/api/v1/forum/description/:id", async (req, res) => {
     console.log(req.params.id);
     console.log("get a forum");
 
     try {
-        const results = await db.query("SELECT * FROM forum where forumid = $1",[req.params.id]);
+        const results = await db.query("SELECT * FROM forum where forumid = $1", [req.params.id]);
         console.log(results);
         res.status(200).json({
             status: "success",
@@ -220,14 +220,14 @@ app.get("/forum/description/:id", async(req, res) => {
 });
 
 // Update a forum
-app.put("/forum/update/:id", async (req, res) => {
+app.put("/api/v1/forum/update/:id", async (req, res) => {
     console.log("update forum");
     console.log(req.params.id);
     console.log(req.body.replies)
 
-    try{
-        const results = await db.query("UPDATE test SET reply = $1 WHERE forumid = $2", 
-        [req.body.replies, req.body.id]);
+    try {
+        const results = await db.query("UPDATE test SET reply = $1 WHERE forumid = $2",
+            [req.body.replies, req.body.id]);
         console.log(results);
 
         res.status(200).json({
@@ -237,20 +237,20 @@ app.put("/forum/update/:id", async (req, res) => {
             },
         });
 
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
-    
+
 });
 
 // Create a reply
-app.post("/forum/reply", async(req, res) => {
+app.post("/api/v1/forum/reply", async (req, res) => {
     console.log("create reply");
 
     try {
-        const results = await db.query("INSERT INTO replyforum (userid, forumid, name, reply, date, time) values ($1,$2,$3,$4,$5,$6)", [req.body.userid, req.body.id, req.body.myreply.author, req.body.myreply.reply, req.body.myreply.date, req.body.myreply.time])
+        const results = await db.query("INSERT INTO replyforum (userid, forumid, name, reply, date, time) values ($1,$2,$3,$4,$5,$6)", [req.body.userid, req.body.forumid, req.body.author, req.body.reply, req.body.date, req.body.time])
         console.log(results);
-        
+
     } catch (err) {
         console.log(err);
     }
@@ -258,12 +258,12 @@ app.post("/forum/reply", async(req, res) => {
 });
 
 // Get certain reply
-app.get("/forum/reply/:id", async(req, res) => {
+app.get("/api/v1/forum/reply/:id", async (req, res) => {
     console.log("get certain reply");
     console.log(req.params.id);
 
     try {
-        const results = await db.query("SELECT * FROM replyforum where forumid = $1",[req.params.id]);
+        const results = await db.query("SELECT * FROM replyforum where forumid = $1", [req.params.id]);
         console.log(results);
         res.status(200).json({
             status: "success",
@@ -294,8 +294,8 @@ app.get("/forum/reply/:id", async(req, res) => {
 //     } catch(err){
 //         console.log(err);
 //     }
-    
-    
+
+
 // });
 
 // //Get a forum
@@ -335,13 +335,13 @@ app.get("/forum/reply/:id", async(req, res) => {
 //    } catch (error) {
 //         console.log(err); 
 //    }
-   
+
 
 // });
 
 // //Update a forum
 // app.put("/api/v1/forum/:id",async(req,res) =>{
-    
+
 //     try {
 //         const results = await db.query(
 //             "UPDATE forum SET comment = $1, where forumid = $2 returning *", 
@@ -357,7 +357,7 @@ app.get("/forum/reply/:id", async(req, res) => {
 //     } catch (err) {
 //         console.log(err); 
 //     }    
-    
+
 //  });
 
 //  //Delete a forum
@@ -372,16 +372,16 @@ app.get("/forum/reply/:id", async(req, res) => {
 //             res.status(204).json({
 //                 status: "success",
 //             });
-            
+
 //     } catch (err) {
 //         console.log(err); 
 //     }
-   
+
 //  });
 
- //--------------------------------------------------------------------
+//--------------------------------------------------------------------
 
- //Get all video
+//Get all video
 // app.get("/api/v1/video", async (req,res) =>{
 
 
@@ -398,14 +398,14 @@ app.get("/forum/reply/:id", async(req, res) => {
 //     } catch(err){
 //         console.log(err);
 //     }
-    
-    
+
+
 // });
 
 // //Create a video
 // app.post("/api/v1/video",async (req,res) =>{
 //     console.log(req.body);
- 
+
 //     try {
 //          const results = await db.query(
 //          "INSERT INTO video (title, link) values ($1, $2) returning *", [req.body.title, req.body.link]
@@ -420,67 +420,67 @@ app.get("/forum/reply/:id", async(req, res) => {
 //     } catch (error) {
 //          console.log(err); 
 //     }
-    
- 
+
+
 //  });
 
 
- //////////////////////////////////////////////Profile\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//////////////////////////////////////////////Profile\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
- //Create a profile
-app.post("/api/v1/profile",async (req,res) =>{
+//Create a profile
+app.post("/api/v1/profile", async (req, res) => {
     console.log("create a profile");
     console.log(req.body);
- 
-    try {
-         const results = await db.query(
-         "INSERT INTO users (fullname, email, password, phonenumber, school, usertype) values ($1, $2, $3, $4, $5, $6) returning *", [req.body.name, req.body.email, req.body.password, req.body.phoneNumber, req.body.school, req.body.usertype]
-         );
-         console.log(results);
-         res.status(201).json({
-             status: "success",
-             data:{
-                 profile: results.rows[0],
-             }, 
-         });
-    } catch (error) {
-         console.log(err); 
-    }
-    
- 
- });
 
- //Get a profile (guna ni nak retrieve authorization)
-app.get("/api/v1/profile/:email", async(req,res) =>{
-    console.log("get a profile");
-    console.log(req.params.email);
- 
     try {
         const results = await db.query(
-            "select * from users where email = $1",[req.params.email]
-            );
+            "INSERT INTO users (fullname, email, password, phonenumber, school, usertype) values ($1, $2, $3, $4, $5, $6) returning *", [req.body.name, req.body.email, req.body.password, req.body.phoneNumber, req.body.school, req.body.usertype]
+        );
+        console.log(results);
+        res.status(201).json({
+            status: "success",
+            data: {
+                profile: results.rows[0],
+            },
+        });
+    } catch (error) {
+        console.log(err);
+    }
+
+
+});
+
+//Get a profile (guna ni nak retrieve authorization)
+app.get("/api/v1/profile/:email", async (req, res) => {
+    console.log("get a profile");
+    console.log(req.params.email);
+
+    try {
+        const results = await db.query(
+            "select * from users where email = $1", [req.params.email]
+        );
         res.status(200).json({
-         status: "success",
-         data:{
-             profile: results.rows[0],
-         }, 
-    });
+            status: "success",
+            data: {
+                profile: results.rows[0],
+            },
+        });
     } catch (err) {
         console.log(err);
     }
- });
+});
 
 
 
 ////////////////////////////////Class\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 // Create a class
-app.post("/api/v1/class", async(req, res) => {
-console.log("create class");
+app.post("/api/v1/class", async (req, res) => {
+    console.log("create class");
     try {
         const results = await db.query("INSERT INTO class (userid, name, code, subject) values ($1,$2,$3,$4) returning *", [req.body.userid, req.body.name, req.body.code, req.body.selectedSubject]);
         console.log(results);
-        
+
     } catch (err) {
         console.log(err);
     }
@@ -488,8 +488,8 @@ console.log("create class");
 });
 
 // Get a class by code
-app.get("/api/v1/class/:code", async(req, res) => {
-console.log("get class by code");
+app.get("/api/v1/class/:code", async (req, res) => {
+    console.log("get class by code");
     console.log(req.params.code);
 
     try {
@@ -508,8 +508,8 @@ console.log("get class by code");
 });
 
 // Get a class by id
-app.get("/api/v1/class/id/:id", async(req, res) => {
-     console.log("get class by id");
+app.get("/api/v1/class/id/:id", async (req, res) => {
+    console.log("get class by id");
 
     try {
         const results = await db.query("SELECT * FROM class WHERE userid = $1", [req.params.id]);
@@ -532,9 +532,9 @@ app.put("/api/v1/profile/mathematics/:id", async (req, res) => {
     console.log(req.params.id);
     console.log(req.body)
 
-    try{
-        const results = await db.query("UPDATE users SET math = $1 WHERE userid = $2 returning *", 
-        [req.body.code, req.params.id]);
+    try {
+        const results = await db.query("UPDATE users SET math = $1 WHERE userid = $2 returning *",
+            [req.body.code, req.params.id]);
 
         res.status(200).json({
             status: "success",
@@ -543,10 +543,10 @@ app.put("/api/v1/profile/mathematics/:id", async (req, res) => {
             },
         });
 
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
-    
+
 });
 
 // Update physics code at user profile
@@ -554,9 +554,9 @@ app.put("/api/v1/profile/physics/:id", async (req, res) => {
     console.log(req.params.id);
     console.log(req.body)
 
-    try{
-        const results = await db.query("UPDATE users SET physics = $1 WHERE userid = $2 returning *", 
-        [req.body.code, req.params.id]);
+    try {
+        const results = await db.query("UPDATE users SET physics = $1 WHERE userid = $2 returning *",
+            [req.body.code, req.params.id]);
 
         res.status(200).json({
             status: "success",
@@ -565,10 +565,10 @@ app.put("/api/v1/profile/physics/:id", async (req, res) => {
             },
         });
 
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
-    
+
 });
 
 // Update chemistry code at user profile
@@ -576,9 +576,9 @@ app.put("/api/v1/profile/chemistry/:id", async (req, res) => {
     console.log(req.params.id);
     console.log(req.body)
 
-    try{
-        const results = await db.query("UPDATE users SET chemistry = $1 WHERE userid = $2 returning *", 
-        [req.body.code, req.params.id]);
+    try {
+        const results = await db.query("UPDATE users SET chemistry = $1 WHERE userid = $2 returning *",
+            [req.body.code, req.params.id]);
 
         res.status(200).json({
             status: "success",
@@ -587,10 +587,10 @@ app.put("/api/v1/profile/chemistry/:id", async (req, res) => {
             },
         });
 
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
-    
+
 });
 
 // Update biology code at user profile
@@ -598,9 +598,9 @@ app.put("/api/v1/profile/biology/:id", async (req, res) => {
     console.log(req.params.id);
     console.log(req.body)
 
-    try{
-        const results = await db.query("UPDATE users SET biology = $1 WHERE userid = $2 returning *", 
-        [req.body.code, req.params.id]);
+    try {
+        const results = await db.query("UPDATE users SET biology = $1 WHERE userid = $2 returning *",
+            [req.body.code, req.params.id]);
 
         res.status(200).json({
             status: "success",
@@ -609,38 +609,38 @@ app.put("/api/v1/profile/biology/:id", async (req, res) => {
             },
         });
 
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
-    
+
 });
 
 //////////////////////////////////////Video\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 // Get all video
-app.get("/api/v1/video", async (req, res)=>{
-console.log("get all video");
-    try{
-    const results = await db.query("SELECT * FROM video")
-    console.log(results);
-    res.status(200).json({
-        status: "success",
-        data: {
-            video: results.rows,
-        },
-    });
-    }catch(err){
+app.get("/api/v1/video", async (req, res) => {
+    console.log("get all video");
+    try {
+        const results = await db.query("SELECT * FROM video")
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                video: results.rows,
+            },
+        });
+    } catch (err) {
         console.log(err);
     }
 
 });
 
 // Get certain video
-app.get("/api/v1/video/:info", async (req, res)=>{
-console.log("get certain video");
+app.get("/api/v1/video/:info", async (req, res) => {
+    console.log("get certain video");
     console.log(req.params.info)
 
-    try{
+    try {
         const results = await db.query("SELECT * FROM video WHERE class=$1", [req.params.info])
         // console.log(results);
         res.status(200).json({
@@ -649,19 +649,19 @@ console.log("get certain video");
                 video: results.rows,
             },
         });
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
 
 });
 
 // Create a video
-app.post("/api/v1/create/video", async(req, res)=>{
+app.post("/api/v1/create/video", async (req, res) => {
     console.log("create a video");
     console.log(req.body);
     // subject="physics"
 
-    try{
+    try {
         const results = await db.query("INSERT INTO video (title, link, subject, class, nameclass) values ($1,$2,$3,$4,$5) returning *", [req.body.title, req.body.link, req.body.subject, req.body.code, req.body.nameclass])
         console.log(results);
         res.status(201).json({
@@ -671,7 +671,7 @@ app.post("/api/v1/create/video", async(req, res)=>{
             },
         });
 
-    }catch(err){
+    } catch (err) {
         console.log(err)
     }
 
@@ -680,15 +680,15 @@ app.post("/api/v1/create/video", async(req, res)=>{
 // Delete a video
 app.delete("/api/v1/video/:id", async (req, res) => {
 
-    try{
+    try {
         const results = db.query("DELETE FROM video where videoid = $1", [req.params.id])
         res.status(204).json({
             status: "success",
         });
-    }catch(err){
+    } catch (err) {
         console.log(err)
     }
-    
+
 });
 
 // // Get mathematics video

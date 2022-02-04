@@ -26,27 +26,22 @@ import {
   Box
 } from 'native-base';
 
-export default function viewForum({ navigation }) {
+export default function viewForumTeacher({ navigation }) {
 
-  //Get profile
+
   const [id, setId] = useState();
+  const [author, setAuthor] = useState();
   const [userclasses, setUserclasses] = useState();
-  const [stclasses, setStclasses] = useState([]);
-  const [lists, setLists] = useState([]);
-  const [subCode, setSubCode] = useState([]);
 
-  //To display
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
-  const [author, setAuthor] = useState();
   const [code, setCode] = useState('');
-  const [nameclass, setNameclass] = useState('');
+  const [lists, setLists] = useState([]);
   const [subject, setSubject] = useState('');
+  const [nameclass, setNameclass] = useState('');
 
-  //Others
   const date = new Date();
-  const todayDate =
-    date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+  const todayDate = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 
   //get current user
   var currentUseremail = '';
@@ -65,18 +60,15 @@ export default function viewForum({ navigation }) {
   const init = async () => {
     try {
       const Profile = await getProfile([]);
-      // console.log(Profile.fullname);
-      const { mathCode, phyCode, chemCode, bioCode } = await getEverything(Profile);
-      getAllForum(mathCode)
-      getAllForum(phyCode)
-      getAllForum(chemCode)
-      getAllForum(bioCode)
-      // if (subCode.length === 4) {
-      //   console.log("before loop");
-      //   for (let i = 0; i < subCode.length; i++) {
-      //     getAllForum(subCode[i])
-      //   }
-      // }
+      const userid = await getEverything(Profile);
+      const Classes = await getClass(userid);
+      if (Classes) {
+        console.log("before loop");
+        for (let i = 0; i < Classes.length; i++) {
+          getAllForum(Classes[i].code)
+        }
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -101,12 +93,7 @@ export default function viewForum({ navigation }) {
       try {
         setAuthor(Profile.fullname);
         setId(Profile.userid);
-        var mathCode = Profile.math
-        var phyCode = Profile.physics
-        var chemCode = Profile.chemistry
-        var bioCode = Profile.biology
-
-        resolve({ mathCode, phyCode, chemCode, bioCode });
+        resolve(Profile.userid);
       } catch (error) {
         // console.log(error)
         reject(false);
@@ -114,13 +101,24 @@ export default function viewForum({ navigation }) {
     });
   };
 
+  const getClass = (userid) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        console.log(userid);
+        const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/class/id/${userid}`)
+        resolve(data.data.class)
+      } catch (error) {
+        console.log(error)
+        reject(error)
+      }
+    })
+  }
 
-
-
-  const getAllForum = async (subCode) => {
+  const getAllForum = async (code) => {
     try {
+
       console.log("get all forum");
-      const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/forum/display/${subCode}`)
+      const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/forum/display/${code}`)
       if (data.data.forum.length !== 0) {
         for (let i = 0; i < data.data.forum.length; i++) {
           setLists(lists => [...lists, data.data.forum[i]])
@@ -131,6 +129,8 @@ export default function viewForum({ navigation }) {
       console.log(err)
     }
   }
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -206,7 +206,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#00A6FB',
-    // backgroundColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -258,7 +257,5 @@ const styles = StyleSheet.create({
     padding: 5,
     borderWidth: 1,
     width: 250
-  },
-
-
+  }
 });

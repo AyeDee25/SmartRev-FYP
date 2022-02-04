@@ -27,23 +27,24 @@ import {
   Box,
 } from 'native-base';
 
-export default function createForum({ navigation }) {
-  //Get profile
+export default function createForumTeacher({ navigation }) {
   const [id, setId] = useState();
-  const [userclasses, setUserclasses] = useState();
-  const [stclasses, setStclasses] = useState([]);
-  const [lists, setLists] = useState([]);
-  const [subCode, setSubCode] = useState([]);
+  const [author, setAuthor] = useState();
+  const [userclasses, setUserclasses] = useState([]);
 
-  //To display
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
-  const [author, setAuthor] = useState();
   const [code, setCode] = useState('');
-  const [nameclass, setNameclass] = useState('');
+  // const [lists, setLists] = useState([]);
   const [subject, setSubject] = useState('');
+  const [nameclass, setNameclass] = useState('');
 
-  //Others
+  // const [titleError, setTitleError] = useState(false);
+  // const [detailsError, setDetailsError] = useState(false);
+  // const [update, setUpdate] = useState(false);
+  // const [dataupdate, setDataupdate] = useState(false);
+  // const [isPending, setIsPending] = useState(false);
+
   const date = new Date();
   const todayDate =
     date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -65,7 +66,9 @@ export default function createForum({ navigation }) {
   const init = async () => {
     try {
       const Profile = await getProfile([]);
-      const something = await getEverything(Profile);
+      const userid = await getEverything(Profile);
+      getClass(userid)
+
     } catch (error) {
       console.log(error);
     }
@@ -88,42 +91,27 @@ export default function createForum({ navigation }) {
   const getEverything = (Profile) => {
     return new Promise(async (resolve, reject) => {
       try {
-        setAuthor(Profile.fullname);
-        setId(Profile.userid);
-        setSubCode(subCode => [...subCode, Profile.math]);
-        setSubCode(subCode => [...subCode, Profile.physics]);
-        setSubCode(subCode => [...subCode, Profile.chemistry]);
-        setSubCode(subCode => [...subCode, Profile.biology]);
-        if (Profile.math != null) {
-          setStclasses(stclasses => [
-            ...stclasses,
-            { sub: 'Mathematics', cod: Profile.math },
-          ]);
-        }
-        if (Profile.physics != null) {
-          setStclasses(stclasses => [
-            ...stclasses,
-            { sub: 'Physics', cod: Profile.physics },
-          ]);
-        }
-        if (Profile.chemistry != null) {
-          setStclasses(stclasses => [
-            ...stclasses,
-            { sub: 'Chemistry', cod: Profile.chemistry },
-          ]);
-        }
-        if (Profile.biology != null) {
-          setStclasses(stclasses => [
-            ...stclasses,
-            { sub: 'Biology', cod: Profile.biology },
-          ]);
-        }
-        resolve(true);
+        setAuthor(Profile.fullname)
+        setId(Profile.userid)
+
+        resolve(Profile.userid);
       } catch (error) {
         // console.log(error)
         reject(false);
       }
     });
+  };
+
+  const getClass = async (userid) => {
+    try {
+      const { data } = await axios.get(
+        `http://10.0.2.2:3006/api/v1/class/id/${userid}`,
+      );
+      setUserclasses(data.data.class);
+      console.log(userclasses);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleTitleChange = value => {
@@ -139,12 +127,14 @@ export default function createForum({ navigation }) {
     var nameclass = '';
     return new Promise(async (resolve, reject) => {
       try {
-        const { data } = await axios.get(
-          `http://10.0.2.2:3006/api/v1/class/${code}`,
-        );
-        subject = data.data.class[0].subject;
-        nameclass = data.data.class[0].name;
-
+        for (let i = 0; i < userclasses.length; i++) {
+          if (userclasses[i].code === code) {
+            // setSubject(userclasses[i].subject);
+            // setNameclass(userclasses[i].name);
+            subject = userclasses[i].subject
+            nameclass = userclasses[i].name
+          }
+        }
         resolve({ subject, nameclass });
       } catch (error) {
         reject(error);
@@ -179,7 +169,7 @@ export default function createForum({ navigation }) {
   const handleSubmit = async () => {
     try {
       const { subject, nameclass } = await getSubjectandClass();
-      console.log('subject' + subject + nameclass);
+      // console.log("subject" + subject + nameclass);
       submitForum(subject, nameclass);
 
       console.log();
@@ -188,7 +178,7 @@ export default function createForum({ navigation }) {
       ]);
     } catch (error) { }
   };
-  // console.log(JSON.stringify(stclasses));
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -232,7 +222,7 @@ export default function createForum({ navigation }) {
 
             <FormControl w="3/4" maxW="300" isRequired marginBottom={25}>
               <FormControl.Label _text={{ bold: true }}>
-                Subject
+                Class
               </FormControl.Label>
               <Select
                 selectedValue={code}
@@ -246,30 +236,13 @@ export default function createForum({ navigation }) {
                 onValueChange={itemValue => {
                   setCode(itemValue);
                 }}>
-                {stclasses.map((stclass, i) => {
-                  // console.log('dalam map');
-                  var sub = '' + stclass.sub;
-                  var cod = '' + stclass.cod;
-                  // console.log(JSON.stringify(stclass));
-                  if (cod != 'takde' && sub != '') {
-                    // console.log('dalam if');
-                    return (
-                      <Select.Item label={sub} id={i.toString()} key={i.toString()} value={cod} />
-                    );
-                  } else {
-                    // return (
-                    //   <Select.Item
-                    //     label={'Dummy label'}
-                    //     id={i}
-                    //     key={i.toString()}
-                    //     value={'Dummy value'}
-                    //   />
-                    // );
-                  }
-                })}
+                {userclasses &&
+                  userclasses.map((userclass, i) => (
+                    <Select.Item label={userclass.name} id={i.toString()} key={i.toString()} value={userclass.code} />
+                  ))}
 
-                {/* <Select.Item label="test 1" id="1" value="1" />
-                <Select.Item label="test 2" id="2" value="2" /> */}
+                {/* <Select.Item label = "test 1" id= '1' value= '1' />
+              <Select.Item label = "test 2" id= '2'value= '2' /> */}
               </Select>
               {/* <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
           Please make a selection!

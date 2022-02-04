@@ -207,7 +207,7 @@ export default function addVideo({navigation}) {
         endIcon: <CheckIcon size={5} />
       }}  onValueChange={itemValue => {setCode(itemValue)}}>
            {userclasses && userclasses.map((userclass) => (
-                <Select.Item label = {userclass.name} id={userclass.classid} value={userclass.code} key = {userclass.classid} />
+                <Select.Item label = {userclass.name} id={userclass.classid} value={userclass.code} key = {userclass.classid.toString()} />
             ))}
         </Select>
         {/* <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>

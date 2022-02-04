@@ -111,15 +111,15 @@ export default function Home({navigation}) {
     </View>
 
     <View style={styles.row}>
-    <Pressable style={styles.button} onPress={openNote}>
+    <Pressable style={styles.button1} onPress={openNote}>
     <Icon name="sticky-note-o" size={75} color={'black'}></Icon>
       <Text style={styles.text}>Note</Text>
     </Pressable>  
 
-    <Pressable style={styles.button} onPress={openHomework}>
+    {/* <Pressable style={styles.button} onPress={openHomework}>
     <Icon name="book" size={75} color={'black'}></Icon>
       <Text style={styles.text}>Homework</Text>
-    </Pressable>   
+    </Pressable>    */}
 
     
 
@@ -188,15 +188,15 @@ export default function Home({navigation}) {
         </View>
     
         <View style={styles.row}>
-        <Pressable style={styles.button} onPress={openNote}>
+        <Pressable style={styles.button1} onPress={openNote}>
         <Icon name="sticky-note-o" size={75} color={'black'}></Icon>
           <Text style={styles.text}>Note</Text>
         </Pressable>  
     
-        <Pressable style={styles.button} onPress={openHomework}>
+        {/* <Pressable style={styles.button} onPress={openHomework}>
         <Icon name="book" size={75} color={'black'}></Icon>
           <Text style={styles.text}>Homework</Text>
-        </Pressable>   
+        </Pressable>    */}
     
         {/* <Pressable style={styles.button} onPress={() => auth().signOut()}>
           <Text style={styles.text}>Logout</Text>
@@ -249,6 +249,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     // paddingVertical: 12,
     // paddingHorizontal: 32,
+    padding: 10,
+    margin: 25,
+    borderRadius: 25,
+    
+    // elevation: 3,
+    backgroundColor: '#00A6FB',
+  },
+
+  button1: {
+    // flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // paddingVertical: 12,
+    paddingHorizontal: 40,
     padding: 10,
     margin: 25,
     borderRadius: 25,

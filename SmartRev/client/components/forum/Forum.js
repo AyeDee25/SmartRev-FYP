@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+import auth from '@react-native-firebase/auth';
 import { StyleSheet, Text, SafeAreaView, Alert, Pressable, View} from 'react-native';
 import {
   Button,
@@ -13,12 +15,48 @@ import {
 
 export default function Forum({navigation}) {
 
+  //get current user
+  var currentUseremail = '';
+
+  if (auth().currentUser) {
+   currentUseremail = auth().currentUser.email;
+  } else {
+  currentUseremail = '';
+  }
+  
+  const [usertype, setusertype] = useState();
+
+  useEffect(() => {
+    getProfile(); 
+    }, []);
+
+  const getProfile =  async () => {try {
+
+  const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
+  setusertype(data.data.profile.usertype)
+
+  } catch (error) {
+      console.log(error)
+  }
+
+  } 
+
     const createForum = () => {
+      if(usertype=="Student"){
         navigation.navigate("createForum")
+      }
+      else{
+        navigation.navigate("createForumTeacher")
+      }
     }
 
     const viewForum = () => {
+      if(usertype=="Student"){
         navigation.navigate("viewForum")
+      }
+      else{
+        navigation.navigate("viewForumTeacher")
+      }
     }
 
   return (

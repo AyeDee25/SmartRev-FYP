@@ -1,8 +1,8 @@
 import axios from 'axios';
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, SafeAreaView, Alert,Pressable, View, Keyboard, TextInput, TouchableWithoutFeedback, Picker } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, SafeAreaView, Alert, Pressable, View, Keyboard, TextInput, TouchableWithoutFeedback, Picker } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {  
+import {
   VStack,
   FormControl,
   Input,
@@ -15,63 +15,63 @@ import {
   Select,
   CheckIcon,
   WarningOutlineIcon,
- Box 
+  Box
 } from 'native-base';
 import { useIsFocused } from '@react-navigation/native';
 
-export default function joinClass({navigation}) {
+export default function joinClass({ navigation }) {
 
   //get current user
   var currentUseremail = '';
 
   if (auth().currentUser) {
-   currentUseremail = auth().currentUser.email;
+    currentUseremail = auth().currentUser.email;
   } else {
-  currentUseremail = '';
+    currentUseremail = '';
   }
-  
-  const [arrayprofile, setArrayProfile] =  useState([])
+
+  const [arrayprofile, setArrayProfile] = useState([])
   const isFocused = useIsFocused();
   const [userid, setuserid] = useState("");
-  
+
 
   useEffect(() => {
-    getProfile(); 
-    }, []);
+    getProfile();
+  }, []);
 
-  const getProfile =  async () => {
-    
-  try {
+  const getProfile = async () => {
 
-  const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
-  setuserid(data.data.profile.userid)
+    try {
 
-  } catch (error) {
+      const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
+      setuserid(data.data.profile.userid)
+
+    } catch (error) {
       console.log(error)
+    }
+
   }
 
-  } 
-  
   //
 
-// const [topic, settopic] = useState("")
-const [code, setcode] = useState();
-const [subject, setSubject] = useState();
+  // const [topic, settopic] = useState("")
+  const [code, setcode] = useState();
+  const [subject, setSubject] = useState();
 
-const handleCodeChange = (value) => {
+  const handleCodeChange = (value) => {
     setcode(value)
-}
+  }
 
-const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
 
- // if (topic === undefined) {
+  // if (topic === undefined) {
   //   setErrors({
   //     ...errors,
   //     name: 'Topic is required',
   //   });
   //   return false;
   // } 
-  
+
   // if (content.length < 3) {
   //   setErrors({
   //     ...errors,
@@ -79,101 +79,100 @@ const [errors, setErrors] = useState({});
   //   });
   //   return false;
   // }
-  
-  const getSubject = () =>{
 
-    return new Promise(async(resolve,reject) => {
-    try {
+  const getSubject = () => {
 
-      const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/class/${code}`)
-      resolve(data.data.class[0].subject)
+    return new Promise(async (resolve, reject) => {
+      try {
+
+        const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/class/${code}`)
+        resolve(data.data.class[0].subject)
       }
       catch (error) {
-          console.log(error)
-          reject(false)
+        console.log(error)
+        reject(false)
       }
-    }) 
-     }
+    })
+  }
 
-  const setCode = async(subject) =>{
+  const setCode = async (subject) => {
 
     try {
-      const update = await axios.put(`http://10.0.2.2:3006/api/v1/profile/${subject}/${userid}`,{
-          code,
-      })      
-  
-      } catch (error) {
-          console.log(error)
-      }
-
-  }
-  
-
-  const joinClass = async () => {
-    
-  try {
-    const subject = await getSubject()
-    setCode(subject)
-    
-    Alert.alert('','You have joined a class!',[
-      {onPress: () => navigation.goBack()}
-    ])
-
-    
+      const update = await axios.put(`http://10.0.2.2:3006/api/v1/profile/${subject}/${userid}`, {
+        code,
+      })
 
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
-  
-}
+
+  }
+
+
+  const joinClass = async () => {
+
+    try {
+      const subject = await getSubject()
+      setCode(subject)
+
+      Alert.alert('', 'You have joined a class!', [
+        { onPress: () => navigation.goBack() }
+      ])
+
+
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
 
   return (
 
     <NativeBaseProvider>
 
 
-    <TouchableWithoutFeedback onPress={() =>
-      {
+      <TouchableWithoutFeedback onPress={() => {
         Keyboard.dismiss();
       }
-    }>
+      }>
 
-    
-    <SafeAreaView style={styles.container}>
-      
-    <Box
-	    shadow={1}
-		bg={'white'}
-        m = {5}
-        p = {5}
-        width={350}
-		borderRadius={16}
-	>
-    <VStack width="90%" mx="3">
-     
-      <FormControl isRequired>
-        <FormControl.Label _text={{bold: true}}>Enter the Class code</FormControl.Label>
-        <Input
-          placeholder="Class code"
-          onChangeText={handleCodeChange}
-        />
-       
-        <FormControl.ErrorMessage _text={{fontSize: 'xs'}}>Error Content</FormControl.ErrorMessage>
-      </FormControl>
 
-        
-      <Button onPress={joinClass} mt="5" colorScheme="blue">
-        Join Class
-      </Button>
-    </VStack>
-   
-    </Box>
-    </SafeAreaView>
-    
-    </TouchableWithoutFeedback>
+        <SafeAreaView style={styles.container}>
+
+          <Box
+            shadow={1}
+            bg={'white'}
+            m={5}
+            p={5}
+            width={350}
+            borderRadius={16}
+          >
+            <VStack width="90%" mx="3">
+
+              <FormControl isRequired>
+                <FormControl.Label _text={{ bold: true }}>Enter the Class code</FormControl.Label>
+                <Input
+                  placeholder="Class code"
+                  onChangeText={handleCodeChange}
+                />
+
+                <FormControl.ErrorMessage _text={{ fontSize: 'xs' }}>Error Content</FormControl.ErrorMessage>
+              </FormControl>
+
+
+              <Button onPress={joinClass} mt="5" colorScheme="blue">
+                Join Class
+              </Button>
+            </VStack>
+
+          </Box>
+        </SafeAreaView>
+
+      </TouchableWithoutFeedback>
 
     </NativeBaseProvider>
-      
+
   );
 }
 

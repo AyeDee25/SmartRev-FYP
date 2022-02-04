@@ -1,14 +1,14 @@
 import axios from 'axios';
-import React, {useState, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, View, TextInput, ScrollView, Alert} from 'react-native';
-import {Icon} from 'react-native-elements';
-import {useIsFocused} from "@react-navigation/native";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, SafeAreaView, View, TextInput, ScrollView, Alert } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { useIsFocused } from "@react-navigation/native";
 import auth from '@react-native-firebase/auth';
 import { DataTable } from 'react-native-paper';
 
 
-import { 
-  Text, 
+import {
+  Text,
   VStack,
   FormControl,
   Input,
@@ -26,177 +26,179 @@ import {
   Modal,
   Pressable,
 
- 
-Box } from 'native-base';
+
+  Box
+} from 'native-base';
+import { color } from 'native-base/lib/typescript/theme/styled-system';
 
 
 
-export default function videoList({navigation}) {
-    console.log("videolist rendering");
-   //get current user
-   var currentUseremail = '';
+export default function videoList({ navigation }) {
+  console.log("videolist rendering");
+  //get current user
+  var currentUseremail = '';
 
-   if (auth().currentUser) {
+  if (auth().currentUser) {
     currentUseremail = auth().currentUser.email;
-   } else {
-   currentUseremail = '';
-   }
-   
-   //tggu getprofile settle baru execute getarrayflashcard
-   useEffect(() => {
-     init();
-     }, []);
+  } else {
+    currentUseremail = '';
+  }
 
-   const init = async() => {
-     try {
-      const userid =  await getProfile();
-      console.log(userid);
+  //tggu getprofile settle baru execute getarrayflashcard
+  useEffect(() => {
+    init();
+  }, []);
+
+  const init = async () => {
+    try {
+      const userid = await getProfile();
       const Classes = await getClass(userid);
-      if(Classes){
+      if (Classes) {
         console.log("before loop");
         for (let i = 0; i < Classes.length; i++) {
           getAllVideo(Classes[i].code)
-       }
-      // getAllVideo(userclasses[0].code);
-     }
-       
-     } catch (error) {
-       console.log(error);
-     }
-    
-   
-   
-  
+        }
+        // getAllVideo(userclasses[0].code);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+
+
 
   }
-   const getProfile = () => {
-     
-   return new Promise(async(resolve,reject) => {
-    try {
-    
-      const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
-      resolve(data.data.profile.userid)
-      } catch (error) {
-          console.log(error)
-          reject(false)
-      }
-   }) 
-      
-   
-    
-    }
-    
+  const getProfile = () => {
 
-    const [userclasses, setUserclasses] = useState([]);
-
-    const getClass =  (userid) => {
-      return new Promise(async(resolve,reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
-      
-      
-      console.log(userid);
-      const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/class/id/${userid}`)
-      // setUserclasses(data.data.class)
-      resolve(data.data.class)  
-      // console.log(JSON.stringify(data.data.class));
 
-      
+        const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
+        resolve(data.data.profile.userid)
       } catch (error) {
-          console.log(error)
-          reject(error)
+        console.log(error)
+        reject(false)
       }
     })
-    }
 
-    const [lists, setLists] = useState([]);
-    
 
-    const getAllVideo =  async (code) => {try {
-      
-     console.log("get all video");
-      const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/video/${code}`)
-      if(data.data.video.length !==0 ){
+
+  }
+
+
+  const [userclasses, setUserclasses] = useState([]);
+
+  const getClass = (userid) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+
+
+        console.log(userid);
+        const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/class/id/${userid}`)
+        // setUserclasses(data.data.class)
+        resolve(data.data.class)
+        // console.log(JSON.stringify(data.data.class));
+
+
+      } catch (error) {
+        console.log(error)
+        reject(error)
+      }
+    })
+  }
+
+  const [lists, setLists] = useState([]);
+
+
+  const getAllVideo = async (code) => {
+    try {
+
+      console.log("get all video");
+      const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/video/${code}`)
+      if (data.data.video.length !== 0) {
         for (let i = 0; i < data.data.video.length; i++) {
           setLists(lists => [...lists, data.data.video[i]])
         }
       }
-    } 
+    }
     catch (err) {
       console.log(err)
     }
   }
 
-  const handleDelete = async (id) =>{
-  
-    try{
-        const {data} = await axios.delete(`http://10.0.2.2:3006/api/v1/video/${id}`)
-        setLists(lists.filter(list => {
-            return list.videoid !== id
-        }))
-        // console.log(response);
-        // Alert.alert('','You have deleted a video!',[
-        //   {onPress: () => navigation.goBack()}
-        // ])
+  const handleDelete = async (id) => {
 
-    } catch(err){
-        console.log(err)
+    try {
+      const { data } = await axios.delete(`http://10.0.2.2:3006/api/v1/video/${id}`)
+      setLists(lists.filter(list => {
+        return list.videoid !== id
+      }))
+      // console.log(response);
+      // Alert.alert('','You have deleted a video!',[
+      //   {onPress: () => navigation.goBack()}
+      // ])
+
+    } catch (err) {
+      console.log(err)
     }
-}
-
-  
+  }
 
 
-   
-   ////
- 
 
-  
-    const isFocused = useIsFocused();
-    
- 
 
-    
-    
 
-    return (
-      <SafeAreaView style={styles.container}>
-    
-        <ScrollView  showsVerticalScrollIndicator={false}> 
-        
+  ////
+
+
+
+  const isFocused = useIsFocused();
+
+
+
+
+
+
+  return (
+    <SafeAreaView style={styles.container}>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+
         <DataTable>
-        <DataTable.Header>
-          <DataTable.Title>Class</DataTable.Title>
-          <DataTable.Title>Title</DataTable.Title>
-          <DataTable.Title numeric></DataTable.Title>
-        </DataTable.Header>
+          <DataTable.Header style={styles.header}>
+            <DataTable.Title>Class</DataTable.Title>
+            <DataTable.Title>Title</DataTable.Title>
+            <DataTable.Title numeric></DataTable.Title>
+          </DataTable.Header>
 
-        {lists && lists.map((list) => (
-        <DataTable.Row key={list.videoid}>
-          <DataTable.Cell>{list.nameclass}</DataTable.Cell>
-          <DataTable.Cell>{list.title}</DataTable.Cell>
-          <DataTable.Cell numeric><Button
-                        colorScheme="secondary"
-                        onPress={() => {
-                          handleDelete(list.videoid);
-                          alert("You have deleted a video!")
-                          
-                        }}
-                      >
-                        Delete
-                      </Button></DataTable.Cell>
-        </DataTable.Row>
-        ))}
+          {lists && lists.map((list) => (
+            <DataTable.Row style={styles.row} key={list.videoid}>
+              <DataTable.Cell>{list.nameclass}</DataTable.Cell>
+              <DataTable.Cell>{list.title}</DataTable.Cell>
+              <DataTable.Cell numeric><Button
+                colorScheme="secondary"
+                onPress={() => {
+                  handleDelete(list.videoid);
+                  alert("You have deleted a video!")
+
+                }}
+              >
+                Delete
+              </Button></DataTable.Cell>
+            </DataTable.Row>
+          ))}
 
 
-      </DataTable>
-      {/* color="error" */}
-      {/* startIcon={<DeleteIcon />} */}
+        </DataTable>
+        {/* color="error" */}
+        {/* startIcon={<DeleteIcon />} */}
 
-         </ScrollView>
+      </ScrollView>
 
-              
-      </SafeAreaView>
-    );
+
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -207,6 +209,14 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     paddingTop: 100,
     paddingHorizontal: 30,
+  },
+
+  row: {
+    backgroundColor: 'white',
+  },
+
+  header: {
+    backgroundColor: '#ffff66',
   },
 
   button: {
@@ -235,21 +245,21 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '500',
-    
+    alignItems: 'center',
   },
 
   flashcard: {
-    borderWidth: 5, 
-    borderColor: 'black', 
-    marginVertical: 10, 
+    borderWidth: 5,
+    borderColor: 'black',
+    marginVertical: 10,
     width: 300
   },
 
   flashcardcontent: {
-      paddingVertical:10,
-      marginHorizontal: 5,
-      height: 75,
-      backgroundColor: '#00A6FB',
+    paddingVertical: 10,
+    marginHorizontal: 5,
+    height: 75,
+    backgroundColor: '#00A6FB',
   },
 
   inputlong: {
