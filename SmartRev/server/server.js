@@ -691,6 +691,384 @@ app.delete("/api/v1/video/:id", async (req, res) => {
 
 });
 
+//////////////////////////////////////Quiz\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// Create a quiz
+app.post("/api/v1/quiz/create", async (req, res) => {
+    console.log("create a quiz");
+    console.log(req.body);
+
+    try {
+        const results = await db.query("INSERT INTO quiz (userid, title, class, subject, nameclass) values ($1, $2, $3, $4, $5) RETURNING *",
+            [req.body.id, req.body.title, req.body.code, req.body.subject, req.body.nameclass]);
+
+        console.log(results);
+        res.status(201).json({
+            status: "success",
+            data: {
+                quiz: results.rows[0],
+            },
+        });
+
+    } catch (err) {
+        console.log(err)
+    }
+
+});
+
+
+// Get certain quiz
+app.get("/api/v1/quiz/display/:id", async (req, res) => {
+    console.log("get certain quiz");
+    console.log(req.params.id)
+    try {
+        const results = await db.query("SELECT * FROM quiz WHERE userid = $1", [req.params.id]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                quiz: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+//Get certain quiz with class code
+app.get("/api/v1/quiz/class/:code", async (req, res) => {
+    console.log("get certain quiz with class code");
+    try {
+        const results = await db.query("SELECT * FROM quiz WHERE class = $1", [req.params.code]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                quiz: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get a quiz with quizid
+app.get("/api/v1/quiz/edit/:qid", async (req, res) => {
+    console.log("get a quiz with quizid");
+    console.log(req.params.qid)
+    try {
+        const results = await db.query("SELECT * FROM quiz WHERE quizid = $1", [req.params.qid]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                quiz: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get a quiz with quizid and subject
+app.get("/api/v1/quiz/display/:id/:sub", async (req, res) => {
+    console.log("get quiz with quizid and subject");
+    try {
+        const results = await db.query("SELECT * FROM quiz WHERE userid = $1 AND subject = $2", [req.params.id, req.params.sub]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                quiz: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+//Update quiz
+app.put("/api/v1/quiz/update", async (req, res) => {
+    console.log("update");
+    try {
+        const results = await db.query("UPDATE quiz SET title=$1, class=$2, subject=$3, nameclass=$4 WHERE quizid=$5",
+            [req.body.title, req.body.class, req.body.subject, req.body.nameclass, req.body.id]);
+        console.log(results);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                quiz: results.rows[0],
+            },
+        });
+
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Delete a quiz
+app.delete("/api/v1/quiz/delete/:id", async (req, res) => {
+    console.log("delete quiz");
+    try {
+        const results = db.query("DELETE FROM quiz WHERE quizid = $1", [req.params.id])
+        res.status(204).json({
+            status: "success",
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Create a question
+app.post("/api/v1/quiz/create/question", async (req, res) => {
+    console.log("create question");
+    console.log(req.body);
+    // const quizid = 5;
+
+    try {
+        const results = await db.query("INSERT INTO question (quizid, quest, option1, option2, option3, option4, answer) values ($1, $2, $3, $4, $5, $6, $7)",
+            [req.body.quizid, req.body.quest, req.body.option1, req.body.option2, req.body.option3, req.body.option4, req.body.answer]);
+
+        console.log(results);
+        res.status(201).json({
+            status: "success",
+            data: {
+                question: results.rows[0],
+            },
+        });
+
+    } catch (err) {
+        console.log(err)
+    }
+
+});
+
+// Get quiz question with quiz id
+app.get("/api/v1/quiz/question/:qid", async (req, res) => {
+    console.log("get quiz question with quiz id");
+    console.log(req.params.qid)
+    try {
+        const results = await db.query("SELECT * FROM question WHERE quizid = $1", [req.params.qid]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                question: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+//Update question
+app.put("/api/v1/quiz/question/update", async (req, res) => {
+    console.log("update question");
+    try {
+        const results = await db.query("UPDATE question SET quest=$1, option1=$2, option2=$3, option3=$4, option4=$5, answer=$6 WHERE quizid=$7",
+            [req.body.quest.quest, req.body.quest.option1, req.body.quest.option2, req.body.quest.option3, req.body.quest.option4, req.body.quest.answer, req.body.id]);
+        console.log(results);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                quiz: results.rows[0],
+            },
+        });
+
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Delete question by quizid
+app.delete("/api/v1/quiz/delete/quest/:id", async (req, res) => {
+    console.log("delete question by quizid");
+    try {
+        const results = db.query("DELETE FROM question WHERE quizid = $1", [req.params.id])
+        res.status(204).json({
+            status: "success",
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+/////////////////////////////////////////////Note\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// Create a note
+app.post("/note/create", async (req, res) => {
+
+    // const name = "file"
+    try {
+        const results = await db.query("INSERT INTO note (userid, note, filename) values ($1, $2, $3)", [req.body.id, req.body.link, req.body.name])
+        // console.log(req.body.url);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Create a note by saving
+app.post("/note/create/save", async (req, res) => {
+
+    try {
+        const results = await db.query("INSERT INTO note (userid, note, filename) values ($1, $2, $3)", [req.body.id, req.body.link, req.body.filename])
+        console.log(req.body.url);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Create a note for class by teacher
+app.post("/note/class/teacher/create", async (req, res) => {
+
+    //const name = "file"
+    try {
+        const results = await db.query("INSERT INTO note (userid, note, filename, class, subject, nameclass) values ($1, $2, $3, $4, $5, $6)",
+            [req.body.id, req.body.link, req.body.name, req.body.code, req.body.subject, req.body.classname])
+
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Create a note for class by student
+app.post("/note/class/student/create", async (req, res) => {
+
+    // const name = "file"
+    try {
+        const results = await db.query("INSERT INTO note (userid, note, filename, class, subject) values ($1, $2, $3, $4, $5)",
+            [req.body.id, req.body.link, req.body.name, req.body.code, req.body.subject])
+
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get all note
+app.get("/note/display", async (req, res) => {
+
+    try {
+        const results = await db.query("SELECT * FROM note");
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                note: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get a note by noteid
+app.get("/note/display/save/:id", async (req, res) => {
+
+    try {
+        const results = await db.query("SELECT * FROM note WHERE noteid=$1 ", [req.params.id]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                note: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get certain note
+app.get("/note/display/:id", async (req, res) => {
+    console.log(req.params.id)
+
+    try {
+        const results = await db.query("SELECT * FROM note WHERE userid=$1 AND class IS NULL ", [req.params.id]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                note: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Get certain note with code
+app.get("/note/class/display/:code", async (req, res) => {
+
+    try {
+        const results = await db.query("SELECT * FROM note WHERE class=$1", [req.params.code]);
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            data: {
+                note: results.rows,
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Delete a note
+app.delete("/note/:id", async (req, res) => {
+
+    try {
+        const results = db.query("DELETE FROM note WHERE noteid = $1", [req.params.id])
+        res.status(204).json({
+            status: "success",
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+// Update note
+app.put("/note/update", async (req, res) => {
+
+    try {
+        const results = await db.query("UPDATE note SET counter = $1 WHERE noteid = $2",
+            [req.body.counter, req.body.notId]);
+        console.log(results);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                note: results.rows[0],
+            },
+        });
+
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
 // // Get mathematics video
 // app.get("/api/v1/video/display/mathematics", async(req, res) => {
 

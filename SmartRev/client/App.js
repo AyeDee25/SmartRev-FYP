@@ -167,7 +167,7 @@ export const App = () => {
 
             <Stack.Screen name="Quiz" component={Quiz} options={{ headerTitle: "Quiz", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
             <Stack.Screen name="answerQuiz" component={answerQuiz} options={{ headerTitle: "Quiz", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
-            <Stack.Screen name="createQuiz" component={createQuiz} options={{ headerShown: false }} />
+            <Stack.Screen name="createQuiz" component={createQuiz} options={{ headerTitle: "Create Quiz", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
 
             <Stack.Screen name="Video" component={Video} options={{ headerTitle: "Video", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
             <Stack.Screen name="addVideo" component={addVideo} options={{ headerTitle: "Add a Video", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
