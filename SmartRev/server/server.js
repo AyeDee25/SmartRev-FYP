@@ -793,10 +793,10 @@ app.get("/api/v1/quiz/display/:id/:sub", async (req, res) => {
 
 //Update quiz
 app.put("/api/v1/quiz/update", async (req, res) => {
-    console.log("update");
+    console.log("update quiz");
     try {
         const results = await db.query("UPDATE quiz SET title=$1, class=$2, subject=$3, nameclass=$4 WHERE quizid=$5",
-            [req.body.title, req.body.class, req.body.subject, req.body.nameclass, req.body.id]);
+            [req.body.title, req.body.code, req.body.subject, req.body.nameclass, req.body.qid]);
         console.log(results);
 
         res.status(200).json({

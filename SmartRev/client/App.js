@@ -31,6 +31,8 @@ import flashcardSubject from './components/flashcard/flashcardSubject';
 import Quiz from './components/quiz/Quiz';
 import createQuiz from './components/quiz/createQuiz';
 import answerQuiz from './components/quiz/answerQuiz';
+import quizListTeacher from './components/quiz/quizListTeacher';
+import editQuiz from './components/quiz/editQuiz';
 
 import Video from './components/video/Video';
 import addVideo from './components/video/addVideo';
@@ -51,6 +53,7 @@ import Profile from './components/profile/Profile';
 import Class from './components/class/Class';
 import createClass from './components/class/createClass';
 import joinClass from './components/class/joinClass';
+
 
 
 const Stack = createStackNavigator()
@@ -168,6 +171,8 @@ export const App = () => {
             <Stack.Screen name="Quiz" component={Quiz} options={{ headerTitle: "Quiz", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
             <Stack.Screen name="answerQuiz" component={answerQuiz} options={{ headerTitle: "Quiz", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
             <Stack.Screen name="createQuiz" component={createQuiz} options={{ headerTitle: "Create Quiz", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
+            <Stack.Screen name="quizListTeacher" component={quizListTeacher} options={{ headerTitle: "Quiz List", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
+            <Stack.Screen name="editQuiz" component={editQuiz} options={{ headerTitle: "Edit Quiz", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
 
             <Stack.Screen name="Video" component={Video} options={{ headerTitle: "Video", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />
             <Stack.Screen name="addVideo" component={addVideo} options={{ headerTitle: "Add a Video", headerTitleAlign: 'center', headerStyle: { backgroundColor: 'orange' } }} />

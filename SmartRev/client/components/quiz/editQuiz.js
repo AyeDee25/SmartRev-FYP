@@ -18,8 +18,10 @@ import {
     Box
 } from 'native-base';
 
-export default function createQuiz({ navigation }) {
+export default function editQuiz({ navigation, route }) {
 
+    const qid = route.params.id
+    const nem = route.params.classname
     //Data
     const [id, setId] = useState();
     const [userclasses, setUserclasses] = useState([]);
@@ -31,8 +33,8 @@ export default function createQuiz({ navigation }) {
     const [nameclass, setNameclass] = useState('');
 
     //Input to question
-    const [quizid, setQuizid] = useState();
-    const [questList, setQuestList] = useState([{ quest: "", option1: "", option2: "", option3: "", option4: "", answer: "" }]);
+    //const [quizid, setQuizid] = useState();
+    const [questList, setQuestList] = useState([]);
 
     //get current user
     var currentUseremail = '';
@@ -51,6 +53,7 @@ export default function createQuiz({ navigation }) {
     const init = async () => {
         const userid = await getProfile();
         getClass(userid);
+        loadQuizInfo()
         setId(userid)
     }
 
@@ -85,6 +88,39 @@ export default function createQuiz({ navigation }) {
 
     }
 
+    const loadQuizInfo = async () => {
+        try {
+
+            const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/quiz/edit/${qid}`)
+            // console.log("title " + data.data.quiz[0].title);
+            setTitle(data.data.quiz[0].title)
+            setCode(data.data.quiz[0].class)
+            // console.log(userclasses);
+        } catch (error) {
+            console.log(error)
+        }
+
+        try {
+            const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/quiz/question/${qid}`)
+            // console.log(response);
+
+            for (let i = 0; i < data.data.question.length; i++) {
+                setQuestList(questList => [...questList, {
+                    quest: data.data.question[i].quest,
+                    option1: data.data.question[i].option1,
+                    option2: data.data.question[i].option2,
+                    option3: data.data.question[i].option3,
+                    option4: data.data.question[i].option4,
+                    answer: data.data.question[i].answer
+                }]);
+            }
+            console.log(data.data.question.length);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     const handleQuestAdd = () => {
         setQuestList([...questList, { quest: "", option1: "", option2: "", option3: "", option4: "", answer: "" }])
     }
@@ -105,19 +141,59 @@ export default function createQuiz({ navigation }) {
     }
 
 
-    const getSubjectandClass = () => {
+    // const getSubjectandClass = () => {
 
-        var subject = ""
-        var nameclass = ""
+    //     var subject = ""
+    //     var nameclass = ""
+    //     return new Promise(async (resolve, reject) => {
+    //         try {
+    //             console.log(userclasses[1].code);
+    //             console.log("code " + code);
+    //             for (let i = 0; i < userclasses.length; i++) {
+    //                 if (userclasses[i].code === code) {
+    //                     setSubject(userclasses[i].subject)
+    //                     setNameclass(userclasses[i].name)
+    //                 }
+    //             }
+    //             // setSubject(subject)
+    //             // setNameclass(nameclass)
+    //             setTitle(title)
+    //             resolve(true)
+    //         } catch (error) {
+    //             reject(error)
+    //         }
+
+    //     })
+    // }
+
+    // const editQuizDatabase = () => {
+
+
+    //     return new Promise(async (resolve, reject) => {
+    //         // console.log(subject + nameclass);
+    //         try {
+    //             const { data } = axios.put("http://10.0.2.2:3006/api/v1/quiz/update", {
+    //                 qid,
+    //                 title,
+    //                 code,
+    //                 subject,
+    //                 nameclass
+    //             })
+    //             resolve(true)
+    //         } catch (error) {
+    //             reject(error)
+    //         }
+
+    //     })
+    // }
+
+    const deleteQuestionDatabase = () => {
+
+
         return new Promise(async (resolve, reject) => {
             try {
-                for (let i = 0; i < userclasses.length; i++) {
-                    if (userclasses[i].code === code) {
-                        subject = userclasses[i].subject
-                        nameclass = userclasses[i].name
-                    }
-                }
-                resolve({ subject, nameclass })
+                const { data } = axios.delete(`http://10.0.2.2:3006/api/v1/quiz/delete/quest/${qid}`)
+                resolve(true)
             } catch (error) {
                 reject(error)
             }
@@ -125,28 +201,9 @@ export default function createQuiz({ navigation }) {
         })
     }
 
+    const insertQuestion = async () => {
 
-    const insertQuiz = (subject, nameclass) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const { data } = await axios.post("http://10.0.2.2:3006/api/v1/quiz/create", {
-                    id, title, code, subject, nameclass
-                })
-                resolve(data.data.quiz.quizid);
-                console.log()
-                // Alert.alert('','You have added a video!',[
-                //   {onPress: () => navigation.goBack()}
-                // ])
-
-
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    const insertQuestion = async (quizid) => {
-
+        const quizid = qid
         for (let i = 0; i < questList.length; i++) {
             var quest = questList[i].quest
             var option1 = questList[i].option1
@@ -179,15 +236,20 @@ export default function createQuiz({ navigation }) {
     }
 
 
+
     const handleSubmit = async () => {
 
         try {
-            const { subject, nameclass } = await getSubjectandClass()
-            const something = await insertQuiz(subject, nameclass)
-            console.log("before insert");
-            insertQuestion(something)
+            // const start = await getSubjectandClass()
+            // console.log("subject " + subject);
+            // const something = await editQuizDatabase()
+            const somethingelse = await deleteQuestionDatabase()
+            insertQuestion()
+            // const something = await insertQuiz(subject, nameclass)
+            // console.log("before insert");
+            // insertQuestion(something)
             console.log()
-            Alert.alert('', 'You have added a quiz!', [
+            Alert.alert('', 'You have edited the quiz!', [
                 { onPress: () => navigation.goBack() }
             ])
 
@@ -197,8 +259,6 @@ export default function createQuiz({ navigation }) {
         }
 
     }
-
-
 
 
     return (
@@ -212,6 +272,7 @@ export default function createQuiz({ navigation }) {
                 <ScrollView>
 
 
+
                     <Box
                         shadow={1}
                         bg={'white'}
@@ -222,7 +283,7 @@ export default function createQuiz({ navigation }) {
                     >
 
                         <VStack width="90%" mx="3">
-                            <FormControl isRequired marginBottom={25}>
+                            <FormControl isReadOnly marginBottom={25}>
                                 <FormControl.Label _text={{ bold: true }}>Quiz Title</FormControl.Label>
                                 <Input
 
@@ -233,9 +294,9 @@ export default function createQuiz({ navigation }) {
                                 <FormControl.ErrorMessage _text={{ fontSize: 'xs' }}>Error Title</FormControl.ErrorMessage>
                             </FormControl>
 
-                            <FormControl w="3/4" maxW="300" isRequired marginBottom={25}>
+                            <FormControl w="3/4" maxW="300" isReadOnly marginBottom={25}>
                                 <FormControl.Label _text={{ bold: true }}>Class</FormControl.Label>
-                                <Select selectedValue={code} minWidth="200" accessibilityLabel="Choose Class" placeholder="Choose Class" _selectedItem={{
+                                <Select selectedValue={code} minWidth="200" accessibilityLabel="Choose Class" placeholder={nem} _selectedItem={{
                                     bg: "teal.600",
                                     endIcon: <CheckIcon size={5} />
                                 }} onValueChange={itemValue => { setCode(itemValue) }}>
@@ -368,11 +429,12 @@ export default function createQuiz({ navigation }) {
 
 
                             <Button onPress={handleSubmit} mt="5" colorScheme="blue">
-                                Submit Quiz
+                                Edit Quiz
                             </Button>
                         </Button.Group>
 
                     </VStack>
+
 
 
                 </ScrollView>
