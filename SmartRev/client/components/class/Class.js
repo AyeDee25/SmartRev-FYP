@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import auth from '@react-native-firebase/auth';
 import { useIsFocused } from '@react-navigation/native';
-import { StyleSheet, Text, SafeAreaView, Alert, Pressable, View} from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Alert, Pressable, View } from 'react-native';
 import {
   Button,
   Divider,
@@ -15,50 +15,55 @@ import {
 } from "native-base"
 
 
-export default function Class({navigation}) {
+export default function Class({ navigation }) {
 
-    //get current user
-    var currentUseremail = '';
+  //get current user
+  var currentUseremail = '';
 
-    if (auth().currentUser) {
-     currentUseremail = auth().currentUser.email;
-    } else {
+  if (auth().currentUser) {
+    currentUseremail = auth().currentUser.email;
+  } else {
     currentUseremail = '';
-    }
-    
-    const [usertype, setusertype] = useState();
-    const isFocused = useIsFocused();
-    
-    
-  
-    useEffect(() => {
-      getProfile(); 
-      }, [isFocused]);
-  
-    const getProfile =  async () => {try {
-  
-    const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
-    setusertype(data.data.profile.usertype)
-  
+  }
+
+  const [usertype, setusertype] = useState();
+  const isFocused = useIsFocused();
+
+
+
+  useEffect(() => {
+    getProfile();
+  }, [isFocused]);
+
+  const getProfile = async () => {
+    try {
+
+      const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
+      setusertype(data.data.profile.usertype)
+
     } catch (error) {
-        console.log(error)
-    }
-  
-    } 
-
-    const createClass = () => {
-        navigation.navigate("createClass")
+      console.log(error)
     }
 
-    const joinClass = () => {
-        navigation.navigate("joinClass")
-    }
+  }
 
-if(usertype == "Student"){
-  return (
-  
-     <SafeAreaView style={styles.container}>
-      
+  const createClass = () => {
+    navigation.navigate("createClass")
+  }
+
+  const joinClass = () => {
+    navigation.navigate("joinClass")
+  }
+
+  const viewClass = () => {
+    navigation.navigate("classList")
+  }
+
+  if (usertype == "Student") {
+    return (
+
+      <SafeAreaView style={styles.container}>
+
         <VStack
           w="100%"
           space={2.5}
@@ -68,7 +73,7 @@ if(usertype == "Student"){
           justifyContent="center"
         >
           {/* Solid */}
-          
+
           <Stack
             mb="2.5"
             mt="1.5"
@@ -82,57 +87,58 @@ if(usertype == "Student"){
               md: "0",
             }}
           >
-            <Button size="lg" w = "250" py={4} onPress={joinClass}> Join a Class </Button>
-            
-           
-            
-        </Stack>
-        
-     
+            <Button size="lg" w="250" py={4} onPress={joinClass}> Join a Class </Button>
+
+
+
+          </Stack>
+
+
         </VStack>
       </SafeAreaView>
-   
-      
-  );}
-  else{
+
+
+    );
+  }
+  else {
     return (
-  
+
       <SafeAreaView style={styles.container}>
-       
-         <VStack
-           w="100%"
-           space={2.5}
-           px="2"
-           mt="4"
-           alignItems="center"
-           justifyContent="center"
-         >
-           {/* Solid */}
-           
-           <Stack
-             mb="2.5"
-             mt="1.5"
-             direction={{
-               base: "column",
-               md: "row",
-             }}
-             space={25}
-             mx={{
-               base: "auto",
-               md: "0",
-             }}
-           >
-             
-             <Button size="lg" w = "250" py={4} variant="subtle" onPress={createClass}  > Create a Class </Button>
-             
-         </Stack>
-         
-      
-         </VStack>
-       </SafeAreaView>
-    
-       
-   );
+
+        <VStack
+          w="100%"
+          space={2.5}
+          px="2"
+          mt="4"
+          alignItems="center"
+          justifyContent="center"
+        >
+          {/* Solid */}
+
+          <Stack
+            mb="2.5"
+            mt="1.5"
+            direction={{
+              base: "column",
+              md: "row",
+            }}
+            space={25}
+            mx={{
+              base: "auto",
+              md: "0",
+            }}
+          >
+            <Button size="lg" w="250" py={4} onPress={viewClass}> View Class </Button>
+            <Button size="lg" w="250" py={4} variant="subtle" onPress={createClass}  > Create a Class </Button>
+
+          </Stack>
+
+
+        </VStack>
+      </SafeAreaView>
+
+
+    );
   }
 }
 

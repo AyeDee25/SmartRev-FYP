@@ -89,7 +89,7 @@ export default function joinClass({ navigation }) {
         resolve(data.data.class[0].subject)
       }
       catch (error) {
-        console.log(error)
+        alert("Class cannot be found!")
         reject(false)
       }
     })
@@ -157,7 +157,7 @@ export default function joinClass({ navigation }) {
                   onChangeText={handleCodeChange}
                 />
 
-                <FormControl.ErrorMessage _text={{ fontSize: 'xs' }}>Error Content</FormControl.ErrorMessage>
+                <FormControl.ErrorMessage _text={{ fontSize: 'xs' }}>Error Class Code</FormControl.ErrorMessage>
               </FormControl>
 
 

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   StyleSheet,
   ScrollView,
   Button,
-  ImageBackground, 
+  ImageBackground,
   Keyboard,
   TouchableWithoutFeedback
 } from 'react-native';
@@ -17,111 +17,121 @@ import FormInput from '../../utilities/FormInput';
 import FormButton from '../../utilities/FormButton';
 import auth from '@react-native-firebase/auth'
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
 
-    const [ email, setemail] = useState('')
-    const [ password, setpassword] = useState('')
-    
+  const [email, setemail] = useState('')
+  const [password, setpassword] = useState('')
 
-    const onSignIn = () => {
-      
-        auth().signInWithEmailAndPassword(email, password)
-        .then((result) =>{
-            console.log(result)
-        } )
-        .catch((error) =>{
-            console.log(error)
-        } )
 
-    }
+  const onSignIn = () => {
 
-    return (
-      <TouchableWithoutFeedback onPress={() =>
-        {
-          Keyboard.dismiss();
+    auth().signInWithEmailAndPassword(email, password)
+      .then((result) => {
+        console.log(result)
+      })
+      .catch((error) => {
+        if (error.code == 'auth/wrong-password' || error.code == 'user-not-found') {
+          alert("The password is invalid or the user does not exist!")
+        } else {
+
         }
-      }>
+        console.log(error.message)
+        // console.log(JSON.stringify(error));
+        // alert(error.message)
+      })
 
-            <ScrollView contentContainerStyle={styles.container}>
+  }
 
-            <Image
-             source={require('../../assets/Book.png')}
-             style={styles.logo}
-           />
-           <Text style={styles.text}>SmartRev</Text>
+  return (
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss();
+    }
+    }>
 
-             <FormInput
-             labelValue={email}
-             onChangeText = {(email) => setemail(email)}
-             placeholderText="Email"
-             iconType="mail"
-             keyboardType="email-address"
-             autoCapitalize="none"
-             autoCorrect={false}
-             />
+      <ScrollView contentContainerStyle={styles.container}>
 
-            <FormInput
-             labelValue={password}
-             onChangeText = {(password) => setpassword(password)}
-             placeholderText="Password"
-             iconType="lock"
-             secureTextEntry={true}
-            />
-         
-            <FormButton
-             buttonTitle="Sign In"
-             onPress = {() => onSignIn()}
-            />
+        <Image
+          source={require('../../assets/logo1.png')}
+          style={styles.logo}
+        />
+        {/* <Text style={styles.text}>SmartRev</Text> */}
 
-            <TouchableOpacity style={styles.forgotButton} onPress={() => alert("Tak buat lagi")}>
+        <FormInput
+          labelValue={email}
+          onChangeText={(email) => setemail(email)}
+          placeholderText="Email"
+          iconType="mail"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+
+        <FormInput
+          labelValue={password}
+          onChangeText={(password) => setpassword(password)}
+          placeholderText="Password"
+          iconType="lock"
+          secureTextEntry={true}
+        />
+
+        <FormButton
+          buttonTitle="Sign In"
+          onPress={() => onSignIn()}
+        />
+
+        {/* <TouchableOpacity style={styles.forgotButton} onPress={() => alert("Tak buat lagi")}>
               <Text style={styles.navButtonText}>Forgot Password?</Text>
-            </TouchableOpacity>        
+            </TouchableOpacity>         */}
 
-            <TouchableOpacity
-             style={styles.forgotButton}
-             onPress={() => navigation.navigate('Register')}>
-             <Text style={styles.navButtonText}>
-               Don't have an acount yet? Create here
-             </Text>
-           </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.forgotButton}
+          onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.navButtonText}>
+            Don't have an acount yet? Create here
+          </Text>
+        </TouchableOpacity>
 
-            </ScrollView>
+      </ScrollView>
 
-            </TouchableWithoutFeedback>
-          
-    )
+    </TouchableWithoutFeedback>
+
+  )
 }
 
 export default Login
 
 const styles = StyleSheet.create({
-    container: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
-      paddingTop: 150
-    },
-    logo: {
-      height: 100,
-      width: 100,
-      resizeMode: 'cover',
-    },
-    text: {
-      fontFamily: 'Kufam-SemiBoldItalic',
-      fontSize: 28,
-      marginBottom: 10,
-      color: '#051d5f',
-    },
-    navButton: {
-      marginTop: 15,
-    },
-    forgotButton: {
-      marginVertical: 35,
-    },
-    navButtonText: {
-      fontSize: 18,
-      fontWeight: '500',
-      color: '#2e64e5',
-      fontFamily: 'Lato-Regular',
-    },
-  });
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    paddingTop: 150
+  },
+  logo: {
+    // height: 100,
+    // width: 100,
+    marginBottom: 50,
+    resizeMode: 'cover',
+  },
+  text: {
+    fontFamily: 'Kufam-SemiBoldItalic',
+    fontSize: 28,
+    marginBottom: 10,
+    color: '#051d5f',
+  },
+  navButton: {
+    marginTop: 15,
+  },
+  forgotButton: {
+    marginVertical: 35,
+  },
+  navButtonText: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#2e64e5',
+    fontFamily: 'Lato-Regular',
+
+
+
+  },
+});

@@ -470,6 +470,168 @@ app.get("/api/v1/profile/:email", async (req, res) => {
     }
 });
 
+//Get a profile by id 
+app.get("/api/v1/profile/id/:id", async (req, res) => {
+    console.log("get a profile by id");
+    // console.log(req.params.email);
+
+    try {
+        const results = await db.query(
+            "select * from users where userid = $1", [req.params.id]
+        );
+        res.status(200).json({
+            status: "success",
+            data: {
+                profile: results.rows[0],
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+// Update Profile to key in mark
+app.put("/api/v1/profile/update/:id", async (req, res) => {
+    console.log("masuk key in");
+    if (req.body.subject === "Mathematics") {
+        try {
+            const results = await db.query("UPDATE users SET mathscore = $1 WHERE userid = $2 returning *",
+                [req.body.mark, req.params.id]);
+
+            res.status(200).json({
+                status: "success",
+                data: {
+                    profile: results.rows[0],
+                },
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    else if (req.body.subject === "Physics") {
+
+        try {
+            const results = await db.query("UPDATE users SET physicsscore = $1 WHERE userid = $2 returning *",
+                [req.body.mark, req.params.id]);
+
+            res.status(200).json({
+                status: "success",
+                data: {
+                    profile: results.rows[0],
+                },
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    else if (req.body.subject === "Chemistry") {
+
+        try {
+            const results = await db.query("UPDATE users SET chemistryscore = $1 WHERE userid = $2 returning *",
+                [req.body.mark, req.params.id]);
+
+            res.status(200).json({
+                status: "success",
+                data: {
+                    profile: results.rows[0],
+                },
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    else if (req.body.subject === "Biology") {
+
+        try {
+            const results = await db.query("UPDATE users SET biologyscore = $1 WHERE userid = $2 returning *",
+                [req.body.mark, req.params.id]);
+
+            res.status(200).json({
+                status: "success",
+                data: {
+                    profile: results.rows[0],
+                },
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+    } else {
+        console.log("No Student");
+    }
+
+});
+
+//Get a profile base on code and subject
+app.get("/api/v1/profile/:code/:subject", async (req, res) => {
+    console.log(req.params.code);
+    console.log(req.params.subject);
+
+    if (req.params.subject === "Math") {
+        try {
+            const results = await db.query(`SELECT * FROM users WHERE math = $1`, [req.params.code]);
+            res.status(200).json({
+                status: "success",
+                data: {
+                    profile: results.rows,
+                },
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    else if (req.params.subject === "Physics") {
+        try {
+            const results = await db.query(`SELECT * FROM users WHERE physics = $1`, [req.params.code]);
+            res.status(200).json({
+                status: "success",
+                data: {
+                    profile: results.rows,
+                },
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    else if (req.params.subject === "Chemistry") {
+        try {
+            const results = await db.query(`SELECT * FROM users WHERE chemistry = $1`, [req.params.code]);
+            res.status(200).json({
+                status: "success",
+                data: {
+                    profile: results.rows,
+                },
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    else if (req.params.subject === "Biology") {
+        try {
+            const results = await db.query(`SELECT * FROM users WHERE biology = $1`, [req.params.code]);
+            res.status(200).json({
+                status: "success",
+                data: {
+                    profile: results.rows,
+                },
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+    } else {
+        console.log("No Student");
+    }
+
+
+});
+
 
 
 ////////////////////////////////Class\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -856,7 +1018,7 @@ app.get("/api/v1/quiz/question/:qid", async (req, res) => {
     console.log(req.params.qid)
     try {
         const results = await db.query("SELECT * FROM question WHERE quizid = $1", [req.params.qid]);
-        console.log(results);
+        // console.log(results);
         res.status(200).json({
             status: "success",
             data: {

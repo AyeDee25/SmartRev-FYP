@@ -1,104 +1,105 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import auth from '@react-native-firebase/auth';
 import { useIsFocused } from '@react-navigation/native';
-import { StyleSheet, Text, SafeAreaView, Alert, Button, Pressable, View, Image} from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Alert, Button, Pressable, View, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-export default function videoSubject({navigation}) {
+export default function videoSubject({ navigation }) {
 
-    //get current user
+  //get current user
   var currentUseremail = '';
 
   if (auth().currentUser) {
-   currentUseremail = auth().currentUser.email;
+    currentUseremail = auth().currentUser.email;
   } else {
-  currentUseremail = '';
+    currentUseremail = '';
   }
-  
-  const [arrayprofile, setArrayProfile] =  useState([])
+
+  const [arrayprofile, setArrayProfile] = useState([])
   const isFocused = useIsFocused();
   const [userid, setuserid] = useState("");
   const [mathCode, setMathCode] = useState();
   const [phyCode, setPhyCode] = useState();
   const [chemCode, setChemCode] = useState();
   const [bioCode, setBioCode] = useState();
-  
+
 
   useEffect(() => {
-    getProfile(); 
-    }, []);
+    getProfile();
+  }, []);
 
-  const getProfile =  async () => {try {
+  const getProfile = async () => {
+    try {
 
-  const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
-  setuserid(data.data.profile.userid)
-  setMathCode(data.data.profile.math);
-  setPhyCode(data.data.profile.physics);
-  setChemCode(data.data.profile.chemistry);
-  setBioCode(data.data.profile.biology);
+      const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/profile/${currentUseremail}`)
+      setuserid(data.data.profile.userid)
+      setMathCode(data.data.profile.math);
+      setPhyCode(data.data.profile.physics);
+      setChemCode(data.data.profile.chemistry);
+      setBioCode(data.data.profile.biology);
 
 
 
-  } catch (error) {
+    } catch (error) {
       console.log(error)
+    }
+
   }
 
-  } 
-    
 
-    const openMath = () => {
-        navigation.navigate("watchVideo", {code: mathCode})
-    }
+  const openMath = () => {
+    navigation.navigate("watchVideo", { code: mathCode })
+  }
 
-    const openPhysics = () => {
-        navigation.navigate("watchVideo", {code: phyCode})
-    }
+  const openPhysics = () => {
+    navigation.navigate("watchVideo", { code: phyCode })
+  }
 
-    const openChemistry = () => {
-      navigation.navigate("watchVideo", {code: chemCode})
-    }
+  const openChemistry = () => {
+    navigation.navigate("watchVideo", { code: chemCode })
+  }
 
-    const openBiology = () => {
-      navigation.navigate("watchVideo", {code: bioCode})
-    }
+  const openBiology = () => {
+    navigation.navigate("watchVideo", { code: bioCode })
+  }
 
 
   return (
-  <SafeAreaView style={styles.container}>
-  
-  <View style={styles.row}>
+    <SafeAreaView style={styles.container}>
 
-  <Pressable style={styles.button1} onPress={openMath}>
-    <Icon name="calculator" size={75} color={'black'}></Icon>
-      <Text style={styles.text}>Mathematics</Text>
-    </Pressable>  
+      <View style={styles.row}>
 
-    <Pressable style={styles.button2} onPress={openPhysics}>
-  <Icon name="send" size={75} color={'black'}></Icon>
-      <Text style={styles.text}>Physics</Text>
-    </Pressable>
+        <Pressable style={styles.button1} onPress={openMath}>
+          <Icon name="calculator" size={75} color={'black'}></Icon>
+          <Text style={styles.text}>Mathematics</Text>
+        </Pressable>
 
-    </View>
+        <Pressable style={styles.button2} onPress={openPhysics}>
+          <Icon name="send" size={75} color={'black'}></Icon>
+          <Text style={styles.text}>Physics</Text>
+        </Pressable>
 
-    <View style={styles.row}>
+      </View>
 
-    <Pressable style={styles.button3} onPress={openChemistry}>
-    <Icon name="apple" size={75} color={'black'}></Icon>
-      <Text style={styles.text}>Chemistry</Text>
-    </Pressable>  
+      <View style={styles.row}>
 
-    <Pressable style={styles.button4} onPress={openBiology}>
-    <Icon name="envira" size={75} color={'black'}></Icon>
-      <Text style={styles.text}>Biology</Text>
-    </Pressable>  
+        <Pressable style={styles.button3} onPress={openChemistry}>
+          <Icon name="apple" size={75} color={'black'}></Icon>
+          <Text style={styles.text}>Chemistry</Text>
+        </Pressable>
 
-    </View>
-          
+        <Pressable style={styles.button4} onPress={openBiology}>
+          <Icon name="envira" size={75} color={'black'}></Icon>
+          <Text style={styles.text}>Biology</Text>
+        </Pressable>
+
+      </View>
+
     </SafeAreaView>
-    
-      
+
+
   );
 }
 
@@ -111,10 +112,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingBottom: 50,
-    
+
   },
 
-  row:{
+  row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 25,
     borderRadius: 25,
-    
+
     // elevation: 3,
     backgroundColor: 'pink',
   },
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 25,
     borderRadius: 25,
-    
+
     // elevation: 3,
     backgroundColor: 'blue',
   },
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 25,
     borderRadius: 25,
-    
+
     // elevation: 3,
     backgroundColor: 'yellow',
   },
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 25,
     borderRadius: 25,
-    
+
     // elevation: 3,
     backgroundColor: 'green',
   },

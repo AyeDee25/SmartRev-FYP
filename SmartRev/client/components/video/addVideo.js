@@ -131,7 +131,7 @@ export default function addVideo({ navigation }) {
 
 
     } catch (error) {
-      console.log(error)
+      alert("Error when inserting video!")
     }
 
   }
@@ -148,6 +148,7 @@ export default function addVideo({ navigation }) {
       Alert.alert('', 'You have added a video!', [
         { onPress: () => navigation.goBack() }
       ])
+      // alert("Error when adding video!")
 
     } catch (error) {
 

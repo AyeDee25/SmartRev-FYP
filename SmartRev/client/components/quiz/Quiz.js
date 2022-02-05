@@ -48,7 +48,11 @@ export default function Quiz({ navigation }) {
   }
 
   const answerQuiz = () => {
-    navigation.navigate("answerQuiz")
+    navigation.navigate("quizSubject")
+  }
+
+  const sampleQuiz = () => {
+    navigation.navigate("sampleQuiz")
   }
 
   const createQuiz = () => {
@@ -88,6 +92,8 @@ export default function Quiz({ navigation }) {
             }}
           >
             <Button size="lg" w="250" py={4} onPress={answerQuiz}> Take a Quiz </Button>
+
+            <Button size="lg" w="250" py={4} variant="subtle" onPress={sampleQuiz}  > Sample Quiz </Button>
 
 
 

@@ -92,6 +92,7 @@ export default function createClass({ navigation }) {
 
   const createClass = async () => {
     // alert("You have created a class!")
+    alert('You have created a class! The code is ' + code)
     try {
       const { data } = await axios.post("http://10.0.2.2:3006/api/v1/class", {
         userid,
@@ -100,17 +101,14 @@ export default function createClass({ navigation }) {
         code,
       })
 
-
+      // Alert.alert('', 'You have created a class! The code is ' + code, [
+      //   { onPress: () => navigation.goBack() }
+      // ])
       console.log("dah create class")
-
-
-
     } catch (error) {
       console.log(error)
     }
-    Alert.alert('', 'You have created a class!', [
-      { onPress: () => navigation.goBack() }
-    ])
+
   }
 
 

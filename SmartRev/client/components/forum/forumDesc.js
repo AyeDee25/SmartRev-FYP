@@ -282,6 +282,7 @@ export default function forumDesc({ navigation, route }) {
                             {/* <FormControl.Label _text={{ bold: true }}>Enter the Class code</FormControl.Label> */}
                             <TextArea
                                 value={text}
+                                // numberOfLines={2}
                                 placeholder="Add reply"
                                 onChangeText={setText}
                             />
