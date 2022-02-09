@@ -95,13 +95,13 @@ export default function answerQuiz({ navigation, route }) {
         })
     }
 
-    const setEverything = (something) => {
-        if (something) {
-            setNumberOfQuestion(something.data.question.length)
-            setQuestions(something.data.data.question)
-            setToUpdate(true);
-        }
-    }
+    // const setEverything = (something) => {
+    //     if (something) {
+    //         setNumberOfQuestion(something.data.question.length)
+    //         setQuestions(something.data.data.question)
+    //         setToUpdate(true);
+    //     }
+    // }
 
 
 
@@ -111,7 +111,7 @@ export default function answerQuiz({ navigation, route }) {
         let correct_option = questions[currentQuestionIndex]['answer'];
         setCurrentOptionSelected(selectedOption);
         setCorrectOption(correct_option);
-        // setIsOptionsDisabled(true);
+        setIsOptionsDisabled(true);
         if (selectedOption == correct_option) {
             // Set Score
             setScore(score + 1)
@@ -186,7 +186,7 @@ export default function answerQuiz({ navigation, route }) {
 
                 <TouchableOpacity
                     onPress={() => validateAnswer(questions[currentQuestionIndex]?.option1)}
-                    // disabled={isOptionsDisabled}
+                    disabled={isOptionsDisabled}
                     // key={option1}
                     style={{
                         borderWidth: 3,
@@ -240,7 +240,7 @@ export default function answerQuiz({ navigation, route }) {
 
                 <TouchableOpacity
                     onPress={() => validateAnswer(questions[currentQuestionIndex]?.option2)}
-                    // disabled={isOptionsDisabled}
+                    disabled={isOptionsDisabled}
                     // key={option2}
                     style={{
                         borderWidth: 3,
@@ -294,7 +294,7 @@ export default function answerQuiz({ navigation, route }) {
 
                 <TouchableOpacity
                     onPress={() => validateAnswer(questions[currentQuestionIndex]?.option3)}
-                    // disabled={isOptionsDisabled}
+                    disabled={isOptionsDisabled}
                     // key={option3}
                     style={{
                         borderWidth: 3,
@@ -348,7 +348,7 @@ export default function answerQuiz({ navigation, route }) {
 
                 <TouchableOpacity
                     onPress={() => validateAnswer(questions[currentQuestionIndex]?.option4)}
-                    // disabled={isOptionsDisabled}
+                    disabled={isOptionsDisabled}
                     // key={option4}
                     style={{
                         borderWidth: 3,
