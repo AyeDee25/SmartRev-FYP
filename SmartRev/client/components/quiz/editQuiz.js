@@ -223,9 +223,7 @@ export default function editQuiz({ navigation, route }) {
 
                 })
                 console.log(quizid)
-                // Alert.alert('','You have added a video!',[
-                //   {onPress: () => navigation.goBack()}
-                // ])
+
 
 
             } catch (error) {

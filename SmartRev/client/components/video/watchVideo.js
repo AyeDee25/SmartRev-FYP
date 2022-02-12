@@ -2,9 +2,9 @@ import axios from 'axios';
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Button, View, Alert, Text, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import YoutubePlayer from "react-native-youtube-iframe";
-import {useIsFocused} from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 
-export default function watchVideo({navigation,route}) {
+export default function watchVideo({ navigation, route }) {
 
   const [playing, setPlaying] = useState(false);
   const [arrayvideo, setarrayvideo] = useState([])
@@ -13,7 +13,7 @@ export default function watchVideo({navigation,route}) {
 
   useEffect(() => {
     getArrayVideo();
-    }, [isFocused]);
+  }, [isFocused]);
 
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
@@ -26,16 +26,17 @@ export default function watchVideo({navigation,route}) {
   //   setPlaying((prev) => !prev);
   // }, []);
 
-  const getArrayVideo =  async () => {try {
-  
-    const {data} = await axios.get(`http://10.0.2.2:3006/api/v1/video/${code}`)
-    setarrayvideo(data.data.video)
-   console.log("ni dalam getarrayvideo");
+  const getArrayVideo = async () => {
+    try {
+
+      const { data } = await axios.get(`http://10.0.2.2:3006/api/v1/video/${code}`)
+      setarrayvideo(data.data.video)
 
 
-  } catch (error) {
+
+    } catch (error) {
       console.log(error)
-  }
+    }
 
   }
 
@@ -44,39 +45,39 @@ export default function watchVideo({navigation,route}) {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         {
-           arrayvideo.map((video, index) => {
-             return(
-               <View style = {styles.video} key = {index}>
+          arrayvideo.map((video, index) => {
+            return (
+              <View style={styles.video} key={index}>
 
-                        <View style = {styles.titles}>
-                        
-                        <Text style = {styles.title}>
-                            {video.title}
-                        </Text>
+                <View style={styles.titles}>
 
-                        </View>
-
-                    <YoutubePlayer
-                      height={250}
-                      play={playing}
-                      videoId={video.link}
-                      onChangeState={onStateChange}
-                    />
+                  <Text style={styles.title}>
+                    {video.title}
+                  </Text>
 
                 </View>
-             )
-      {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
-           })
-      }</ScrollView>
+
+                <YoutubePlayer
+                  height={250}
+                  play={playing}
+                  videoId={video.link}
+                  onChangeState={onStateChange}
+                />
+
+              </View>
+            )
+            {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */ }
+          })
+        }</ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     backgroundColor: '#00A6FB',
- 
+
   },
 
   button: {
@@ -108,10 +109,10 @@ const styles = StyleSheet.create({
   },
 
   video: {
-    borderWidth: 5, 
-    borderColor: 'black', 
-    marginTop: 10, 
+    borderWidth: 5,
+    borderColor: 'black',
+    marginTop: 10,
     backgroundColor: 'white'
-    
+
   },
 });

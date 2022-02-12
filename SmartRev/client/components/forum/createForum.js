@@ -168,9 +168,7 @@ export default function createForum({ navigation }) {
       );
 
       console.log();
-      // Alert.alert('','You have added a video!',[
-      //   {onPress: () => navigation.goBack()}
-      // ])
+
     } catch (error) {
       console.log(error);
     }

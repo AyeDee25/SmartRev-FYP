@@ -184,7 +184,6 @@ export default function createQuiz({ navigation }) {
         try {
             const { subject, nameclass } = await getSubjectandClass()
             const something = await insertQuiz(subject, nameclass)
-            console.log("before insert");
             insertQuestion(something)
             console.log()
             Alert.alert('', 'You have added a quiz!', [
